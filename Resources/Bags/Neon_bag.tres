@@ -14,4 +14,6 @@ rarity = 1
 throw_strength_multiplier = 0.1
 max_pitch_angle = 47.0
 material_override = ExtResource("2_4eg3t")
+trail_enabled = true
+trail_color = Color(0.16078432, 0.3529412, 0.7490196, 0.9843137)
 metadata/_custom_type_script = "uid://cs2g11q6pm16d"

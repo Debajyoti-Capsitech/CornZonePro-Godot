@@ -1,12 +1,13 @@
-[gd_resource type="Resource" script_class="MapConfig" format=3 uid="uid://cbaf0v4o8vjt7"]
+[gd_resource type="Resource" script_class="MapConfig" format=3]
 
-[ext_resource type="Script" uid="uid://cb5msbqy6mbc7" path="res://Scripts/Resource Structures/Map_Config.gd" id="1_mok4c"]
+[ext_resource type="Script" path="res://Scripts/Resource Structures/Map_Config.gd" id="1_mok4c"]
 
 [resource]
 script = ExtResource("1_mok4c")
 map_name = "Stadium"
 supports_single_player = true
 supports_pass_and_play = true
+single_player_unlocked = true
 single_player_cost = 2500
 pass_and_play_cost = 2500
 metadata/_custom_type_script = "uid://cb5msbqy6mbc7"

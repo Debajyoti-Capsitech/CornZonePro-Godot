@@ -54,9 +54,7 @@ func _ready() -> void:
 		swipe_controller.swipe_completed.connect(_on_swipe_completed)
 	GameSession.projectile_preview_changed.connect(_on_projectile_preview_changed)
 
-func _process(_delta: float) -> void:
-	if not GameSession.is_projectile_preview_active():
-		clear_path()
+
 
 func _on_swipe_updated(direction: Vector3, strength: float) -> void:
 	if bag == null:

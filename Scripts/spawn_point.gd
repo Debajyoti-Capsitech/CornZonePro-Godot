@@ -35,6 +35,9 @@ func _get_waiting_bag() -> Node:
 
 
 func spawn_bag(player_index: int = GameSession.current_turn):
+	if has_node("/root/AnimateManager"):
+		AnimateManager.start_camera_return()
+
 	var waiting_bag := _get_waiting_bag()
 	if waiting_bag != null:
 		return waiting_bag

@@ -12,4 +12,6 @@ price = 35500
 icon = ExtResource("1_ns5wg")
 rarity = 1
 material_override = ExtResource("1_g6fcd")
+trail_enabled = true
+trail_color = Color(0.9320318, 0.26943395, 0.3777371, 0.95686275)
 metadata/_custom_type_script = "uid://cs2g11q6pm16d"

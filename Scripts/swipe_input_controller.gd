@@ -23,9 +23,12 @@ var start_pos: Vector2
 var end_pos: Vector2
 var swipe_dis: float = 0.0
 var swipe_time: float = 0.0
+var cached_bag_config: BagConfig = null
 
 func _ready() -> void:
 	main_camera = get_viewport().get_camera_3d()
+	# Pre-cache configuration on ready
+	cached_bag_config = _get_active_bag_config()
 
 func is_network_game() -> bool:
 	return GameSession.selected_mode == "Local"
@@ -166,9 +169,13 @@ func _get_max_bag_strength() -> float:
 	return max_bag_strength
 
 func _get_active_bag_config() -> BagConfig:
+	if cached_bag_config != null:
+		return cached_bag_config
+
 	var bag := get_parent()
 	if bag == null:
 		return null
 
 	var throw_player := int(bag.get_meta("throw_player", GameSession.current_turn))
-	return NetworkManager.get_bag_config_for_player(throw_player)
+	cached_bag_config = NetworkManager.get_bag_config_for_player(throw_player)
+	return cached_bag_config

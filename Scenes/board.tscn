@@ -21,13 +21,13 @@ script = ExtResource("2_uh3b8")
 transform = Transform3D(-1.5298985e-08, 0.35, -1.5298985e-08, 0, -1.5298985e-08, -0.35, -0.35, -1.5298985e-08, 6.687399e-16, 0, 0, 0)
 shape = SubResource("ConcavePolygonShape3D_psm7c")
 
-[node name="throwingStand_grp" parent="." index="1" unique_id=1414747398]
+[node name="throwingStand_grp" parent="." index="1" unique_id=1374334774]
 transform = Transform3D(-1.5298985e-08, 0.35, -1.5298985e-08, 0, -1.5298985e-08, -0.35, -0.35, -1.5298985e-08, 6.687399e-16, 0, 0, 0)
 
-[node name="planring_geo_002" parent="throwingStand_grp" index="0" unique_id=1912814189]
+[node name="planring_geo_002" parent="throwingStand_grp" index="0" unique_id=1253927429]
 material_override = ExtResource("3_shhme")
 
-[node name="stand_geo" parent="throwingStand_grp" index="1" unique_id=140189913]
+[node name="stand_geo" parent="throwingStand_grp" index="1" unique_id=2107499081]
 material_override = ExtResource("3_shhme")
 
 [node name="Area3D" type="Area3D" parent="." index="2" unique_id=1634738992]

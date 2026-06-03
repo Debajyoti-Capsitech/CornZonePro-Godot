@@ -18,6 +18,8 @@ func _on_body_entered(body: Node3D) -> void:
 		return
 	
 	SoundManager.play_bag_pot()
+	if has_node("/root/AnimateManager"):
+		AnimateManager.trigger_pot_cinematic(body, self)
 	var scoring_player: int = int(body.get_meta("throw_player", GameSession.current_turn))
 	var score_before: int = GameSession.score_p1 + GameSession.score_p2
 	body.set_meta(SCORED_META, true)
@@ -32,4 +34,3 @@ func _on_body_entered(body: Node3D) -> void:
 
 func _on_body_exited(body: Node3D) -> void:
 	AnimateManager.is_pot = true
-	AnimateManager.is_grounded = false

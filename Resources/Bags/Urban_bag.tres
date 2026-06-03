@@ -11,4 +11,5 @@ bag_name = "Urban"
 price = 1500
 icon = ExtResource("1_bydhn")
 material_override = ExtResource("2_1rgft")
+trail_color = Color(0.3446179, 0.46352458, 0.6911994, 0.9254902)
 metadata/_custom_type_script = "uid://cs2g11q6pm16d"

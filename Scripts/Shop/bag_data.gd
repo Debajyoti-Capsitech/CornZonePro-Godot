@@ -13,6 +13,7 @@ const MAX_VERTICAL     = 4.0
 
 const MAX_HORIZONTAL   = 1.5
 const MAX_BAG_STRENGTH = 50.0
+const PURCHASE_POPUP_SCENE = preload("res://Scenes/UI/purchase_popup.tscn")
 
 @onready var clutch_spot_container = $HBoxContainer/TextureRect2/Powers/ClutchSpot/HBoxContainer
 @onready var miss_clock_container = $HBoxContainer/TextureRect2/Powers/MissClock/HBoxContainer
@@ -81,6 +82,14 @@ func _on_buy_pressed(data: Dictionary) -> void:
 	PlayerData.save_local()
 	FirebaseManager.mark_dirty([FirebaseManager.SECTION_INVENTORY])
 	get_parent().load_bag_data()
+	
+	# Show purchase confirmation popup
+	var shop_screen = get_tree().current_scene.find_child("ShopScreen", true, false)
+	if shop_screen:
+		var popup = PURCHASE_POPUP_SCENE.instantiate()
+		shop_screen.add_child(popup)
+		popup.setup(data.get("icon", ""))
+	
 	# if PlayerData.needs_cloud_sync:
 	# 	await FirebaseManager.push_to_firestore()
 	

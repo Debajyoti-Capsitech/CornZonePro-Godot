@@ -1,12 +1,14 @@
-[gd_resource type="Resource" script_class="MapConfig" format=3 uid="uid://bke30yk2qki6r"]
+[gd_resource type="Resource" script_class="MapConfig" format=3]
 
-[ext_resource type="Script" uid="uid://cb5msbqy6mbc7" path="res://Scripts/Resource Structures/Map_Config.gd" id="1_iq4vj"]
+[ext_resource type="Script" path="res://Scripts/Resource Structures/Map_Config.gd" id="1_iq4vj"]
 
 [resource]
 script = ExtResource("1_iq4vj")
 map_name = "Rooftop"
 supports_single_player = true
 supports_pass_and_play = true
+single_player_unlocked = true
+pass_and_play_unlocked = true
 single_player_cost = 8000
 pass_and_play_cost = 8000
 metadata/_custom_type_script = "uid://cb5msbqy6mbc7"

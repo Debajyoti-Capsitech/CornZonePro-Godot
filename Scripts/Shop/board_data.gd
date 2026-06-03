@@ -7,6 +7,7 @@ extends TextureRect
 @onready var buy_button = $HBoxContainer/VBoxContainer/BagBuyButton
 
 const RARITY_NAMES = ["Standard", "Rare", "Epic", "Legendary"]
+const PURCHASE_POPUP_SCENE = preload("res://Scenes/UI/purchase_popup.tscn")
 
 
 
@@ -59,6 +60,14 @@ func _on_buy_pressed(data: Dictionary) -> void:
 	PlayerData.save_local()
 	FirebaseManager.mark_dirty([FirebaseManager.SECTION_INVENTORY])
 	get_parent().load_board_data()
+	
+	# Show purchase confirmation popup
+	var shop_screen = get_tree().current_scene.find_child("ShopScreen", true, false)
+	if shop_screen:
+		var popup = PURCHASE_POPUP_SCENE.instantiate()
+		shop_screen.add_child(popup)
+		popup.setup(data.get("icon", ""))
+	
 	# if PlayerData.needs_cloud_sync:
 	# 	await FirebaseManager.push_to_firestore()
 	

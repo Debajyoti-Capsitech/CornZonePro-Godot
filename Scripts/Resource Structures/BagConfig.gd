@@ -27,7 +27,7 @@ enum Rarity {Standard, Epic, Rare}
 
 @export_group("Effects")
 @export var trail_enabled: bool = false
-#@export var trail_color: Color = Color.WHITE
+@export var trail_color: Color = Color(0.3, 0.6, 0.9, 0.8)
 #@export var impact_particles: PackedScene
 
 @export_group("Audio")

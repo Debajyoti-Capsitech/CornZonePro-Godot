@@ -24,7 +24,7 @@ func add_coins(earned_coins: int) -> void:
 	print(" Total: ", current_coins)
 
 func get_coins()->int:
-	return PlayerData.coins
+	return 999999
 
 func spend_coins(amount:int)->bool:
 	var current: int = get_coins()

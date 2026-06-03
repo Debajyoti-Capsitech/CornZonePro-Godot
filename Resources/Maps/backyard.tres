@@ -1,12 +1,14 @@
-[gd_resource type="Resource" script_class="MapConfig" format=3 uid="uid://sajego757pt8"]
+[gd_resource type="Resource" script_class="MapConfig" format=3]
 
-[ext_resource type="Script" uid="uid://cb5msbqy6mbc7" path="res://Scripts/Resource Structures/Map_Config.gd" id="1_j1rro"]
+[ext_resource type="Script" path="res://Scripts/Resource Structures/Map_Config.gd" id="1_j1rro"]
 
 [resource]
 script = ExtResource("1_j1rro")
 map_name = "Backyard"
 supports_single_player = true
 supports_pass_and_play = true
+single_player_unlocked = true
+pass_and_play_unlocked = true
 single_player_cost = 5000
 pass_and_play_cost = 5000
 metadata/_custom_type_script = "uid://cb5msbqy6mbc7"

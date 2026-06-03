@@ -32,6 +32,8 @@ func _ready() -> void:
 	GameSession.turns_exhausted.connect(_on_match_over)
 	_clear_labels()
 	_sync_total_scores()
+	if AnimateManager.has_signal("pot_scored_cinematic"):
+		AnimateManager.pot_scored_cinematic.connect(_on_pot_scored_cinematic)
 	p1_turn_ui.visible = true
 	await get_tree().create_timer(1.0).timeout
 	p1_turn_ui.visible = false
@@ -87,4 +89,26 @@ func _on_pause_button_pressed() -> void:
 	SoundManager.play_button_clicks()
 	UIManager.toggle_canvas($"../PauseMenu")
 	AnimateManager.pop_animation($"../PauseMenu/Control")
+
+func _on_pot_scored_cinematic(is_perfect: bool) -> void:
+	var flash = ColorRect.new()
+	flash.name = "ScreenFlash"
+	flash.anchor_right = 1.0
+	flash.anchor_bottom = 1.0
+	flash.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	
+	if is_perfect:
+		flash.color = Color(1.0, 0.85, 0.2, 0.5)
+	else:
+		flash.color = Color(1.0, 1.0, 1.0, 0.4)
+		
+	add_child(flash)
+	
+	var fade_time = 0.45 if is_perfect else 0.35
+	var tween = create_tween()
+	tween.set_ignore_time_scale(true)
+	tween.tween_property(flash, "color:a", 0.0, fade_time)\
+		.set_trans(Tween.TRANS_SINE)\
+		.set_ease(Tween.EASE_OUT)
+	tween.tween_callback(flash.queue_free)
 	

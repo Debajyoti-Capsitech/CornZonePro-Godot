@@ -6,6 +6,7 @@ extends CanvasLayer
 @onready var no_wind_button := $"PowerUp Panel/PowerUp Panel BG/NoWind" as Button
 @onready var micro_interaction := $MicroInteraction
 var no_wind_until_msec: int = 0
+var wind_tween: Tween
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -16,6 +17,8 @@ func _ready() -> void:
 	update_ui()
 	AnimateManager.micro_interaction_signal.connect(pop_in)
 	AnimateManager.party_popper_signal.connect(party_popper)
+	if AnimateManager.has_signal("pot_scored_cinematic"):
+		AnimateManager.pot_scored_cinematic.connect(_on_pot_scored_cinematic)
 
 func update_ui()->void:
 	$Coins/Label.text = str(DataManager.get_coins())
@@ -39,22 +42,46 @@ func add_time():
 func show_wind()->void:
 	if Time.get_ticks_msec() < no_wind_until_msec:
 		return
-	if wind_animation:
-		wind_animation.visible = true
-	if wind_particles:
-		wind_particles.emitting = true
-		wind_particles.restart()
 	if no_wind_button:
 		no_wind_button.disabled = false
 	SoundManager.play_wind()
 
-func hide_wind():
-	if wind_particles:
-		wind_particles.emitting = false
+	if wind_tween and wind_tween.is_valid():
+		wind_tween.kill()
+
 	if wind_animation:
-		wind_animation.visible = false
+		wind_animation.visible = true
+		if not wind_particles or not wind_particles.emitting:
+			wind_animation.modulate.a = 0.0
+
+	if wind_particles:
+		wind_particles.emitting = true
+
+	wind_tween = create_tween()
+	wind_tween.tween_property(wind_animation, "modulate:a", 1.0, 1.5)\
+		.set_trans(Tween.TRANS_SINE)\
+		.set_ease(Tween.EASE_OUT)
+
+func hide_wind():
 	if no_wind_button:
 		no_wind_button.disabled = true
+
+	if wind_tween and wind_tween.is_valid():
+		wind_tween.kill()
+
+	if wind_animation:
+		wind_tween = create_tween()
+		wind_tween.tween_property(wind_animation, "modulate:a", 0.0, 1.5)\
+			.set_trans(Tween.TRANS_SINE)\
+			.set_ease(Tween.EASE_IN)
+		wind_tween.tween_callback(func():
+			if wind_particles:
+				wind_particles.emitting = false
+			wind_animation.visible = false
+		)
+	else:
+		if wind_particles:
+			wind_particles.emitting = false
 
 
 func _on_show_projectile_pressed() -> void:
@@ -122,3 +149,25 @@ func _on_no_wind_pressed() -> void:
 
 	if Time.get_ticks_msec() >= no_wind_until_msec:
 		show_wind()
+
+func _on_pot_scored_cinematic(is_perfect: bool) -> void:
+	var flash = ColorRect.new()
+	flash.name = "ScreenFlash"
+	flash.anchor_right = 1.0
+	flash.anchor_bottom = 1.0
+	flash.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	
+	if is_perfect:
+		flash.color = Color(1.0, 0.85, 0.2, 0.5)
+	else:
+		flash.color = Color(1.0, 1.0, 1.0, 0.4)
+		
+	add_child(flash)
+	
+	var fade_time = 0.45 if is_perfect else 0.35
+	var tween = create_tween()
+	tween.set_ignore_time_scale(true)
+	tween.tween_property(flash, "color:a", 0.0, fade_time)\
+		.set_trans(Tween.TRANS_SINE)\
+		.set_ease(Tween.EASE_OUT)
+	tween.tween_callback(flash.queue_free)
