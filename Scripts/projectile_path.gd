@@ -11,8 +11,8 @@ var endpoint_marker := MeshInstance3D.new()
 var endpoint_mesh := CylinderMesh.new()
 var endpoint_material := StandardMaterial3D.new()
 
-const POINT_COUNT := 60
-const TIME_STEP := 0.0166667
+const POINT_COUNT := 35
+const TIME_STEP := 0.028
 const PATH_WIDTH := 0.1
 const ENDPOINT_RADIUS := 0.35
 const ENDPOINT_HEIGHT := 0.02

@@ -26,7 +26,7 @@ func get_unlock_pref_key(mode: String) -> String:
 	var safe_map_name := map_name.to_lower().replace(" ", "_")
 
 	match mode:
-		"Single":
+		"Single", "VSBot":
 			return "map_unlock_single_%s" % safe_map_name
 		"PassPlay":
 			return "map_unlock_passplay_%s" % safe_map_name
@@ -36,7 +36,7 @@ func get_unlock_pref_key(mode: String) -> String:
 
 func _get_resource_unlock_value(mode: String) -> bool:
 	match mode:
-		"Single":
+		"Single", "VSBot":
 			return single_player_unlocked
 		"PassPlay":
 			return pass_and_play_unlocked
@@ -46,7 +46,7 @@ func _get_resource_unlock_value(mode: String) -> bool:
 
 func _set_resource_unlock_value(mode: String, unlocked: bool) -> void:
 	match mode:
-		"Single":
+		"Single", "VSBot":
 			single_player_unlocked = unlocked
 		"PassPlay":
 			pass_and_play_unlocked = unlocked
@@ -54,7 +54,7 @@ func _set_resource_unlock_value(mode: String, unlocked: bool) -> void:
 
 func supports_mode(mode: String) -> bool:
 	match mode:
-		"Single":
+		"Single", "VSBot":
 			return supports_single_player
 		"PassPlay":
 			return supports_pass_and_play
@@ -98,7 +98,7 @@ func set_unlocked_for_mode(mode: String, unlocked: bool) -> void:
 
 func get_price_for_mode(mode: String) -> int:
 	match mode:
-		"Single":
+		"Single", "VSBot":
 			return single_player_cost
 		"PassPlay":
 			return pass_and_play_cost
@@ -119,6 +119,11 @@ func get_unavailable_reason(mode: String) -> String:
 				return "%s is not available in Single mode." % safe_map_name
 			if not is_unlocked_for_mode(mode):
 				return "%s is locked for Single mode." % safe_map_name
+		"VSBot":
+			if not supports_single_player:
+				return "%s is not available in VS Bot mode." % safe_map_name
+			if not is_unlocked_for_mode(mode):
+				return "%s is locked for VS Bot mode." % safe_map_name
 		"PassPlay":
 			if not supports_pass_and_play:
 				return "%s is not available in Pass & Play." % safe_map_name

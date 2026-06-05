@@ -2870,7 +2870,7 @@ theme_override_styles/normal = SubResource("StyleBoxTexture_uo4rt")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_kx4oe")
 theme_override_styles/hover = SubResource("StyleBoxTexture_g2bjx")
 
-[node name="LockedButton" type="Button" parent="HomeScreen/Panel/RightPanel/RightPanelBG" unique_id=828518004]
+[node name="BotButton" type="Button" parent="HomeScreen/Panel/RightPanel/RightPanelBG" unique_id=828518004]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -7604,7 +7604,7 @@ autowrap_mode = 2
 [connection signal="pressed" from="HomeScreen/Panel/RightPanel/RightPanelBG/TimerButton" to="HomeScreen" method="_on_timer_button_pressed"]
 [connection signal="pressed" from="HomeScreen/Panel/RightPanel/RightPanelBG/PassNPlayButton" to="HomeScreen" method="_on_pass_n_play_button_pressed"]
 [connection signal="pressed" from="HomeScreen/Panel/RightPanel/RightPanelBG/LANButton" to="HomeScreen" method="_on_lan_button_pressed"]
-[connection signal="pressed" from="HomeScreen/Panel/RightPanel/RightPanelBG/LockedButton" to="HomeScreen" method="_on_locked_button_pressed"]
+[connection signal="pressed" from="HomeScreen/Panel/RightPanel/RightPanelBG/BotButton" to="HomeScreen" method="_on_bot_button_pressed"]
 [connection signal="pressed" from="HomeScreen/Panel/BottomPanel/Shop/ShopButton" to="HomeScreen" method="_on_shop_button_pressed"]
 [connection signal="pressed" from="HomeScreen/Panel/BottomPanel/Inventory/InventoryButton" to="HomeScreen" method="_on_inventory_button_pressed"]
 [connection signal="pressed" from="HomeScreen/Panel/BottomPanel/Locked/LockedIcon1" to="HomeScreen" method="_on_locked_icon_1_pressed"]

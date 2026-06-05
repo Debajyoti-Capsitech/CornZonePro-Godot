@@ -3,12 +3,14 @@ extends Node
 const UI_SCENES = {
 	"Single": preload("res://Scenes/UI/single_player_ui.tscn"),
 	"PassPlay": preload("res://Scenes/UI/pass_play_ui.tscn"),
-	"Local": preload("res://Scenes/UI/local_multiplayer_ui.tscn")
+	"Local": preload("res://Scenes/UI/local_multiplayer_ui.tscn"),
+	"VSBot": preload("res://Scenes/UI/user_vs_bot_ui.tscn")
 }
 
 const SingleMode = preload("res://Scripts/Modes/SingleMode.gd")
 const PassPlayMode = preload("res://Scripts/Modes/PassPlayMode.gd")
 const LocalMode = preload("res://Scripts/Modes/LocalMode.gd")
+const VSBotMode = preload("res://Scripts/Modes/VSBotMode.gd")
 
 signal pots_update
 signal match_played
@@ -32,6 +34,8 @@ var player_count: int = 1
 var current_turn: int = 1
 var score_p1: int = 0
 var score_p2: int = 0
+var bot_name: String = "Bot"
+var bot_difficulty: String = "MEDIUM BOT"
 var time_left: float = 20.0
 var projectile_preview_until_msec: int = 0
 var p1_bag_results: Array = []
@@ -56,7 +60,7 @@ func start_match(mode: String, map_path: String, ui: String, time_limit: float) 
 	match mode:
 		"Single":
 			player_count = 1
-		"PassPlay", "Local":
+		"PassPlay", "Local", "VSBot":
 			player_count = 2
 
 	current_turn = 1
@@ -86,6 +90,8 @@ func _set_mode_logic() -> void:
 			mode_logic = PassPlayMode.new()
 		"Local":
 			mode_logic = LocalMode.new()
+		"VSBot":
+			mode_logic = VSBotMode.new()
 
 	if mode_logic:
 		mode_logic.name = "ModeLogic"
@@ -145,6 +151,7 @@ func reset_match() -> void:
 	current_turn = 1
 	score_p1 = 0
 	score_p2 = 0
+	bot_name = "Bot"
 	bags_thrown_this_turn = 0
 	match_over = false
 	p1_bag_results.clear()

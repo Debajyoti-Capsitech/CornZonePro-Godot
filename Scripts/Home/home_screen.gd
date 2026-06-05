@@ -116,8 +116,10 @@ func _update_ui():
 	coin_text.text = str(PlayerData.coins)
 
 
-func _on_locked_button_pressed() -> void:
-	AnimateManager.show_notification($Notification, "New Mode will coming soon", 1.5)
+func _on_bot_button_pressed() -> void:
+	SoundManager.play_button_clicks()
+	UIManager.vs_bot()
+	UIManager.toggle_canvas($"../MapSelectScreen")
 
 
 func _on_locked_icon_1_pressed() -> void:

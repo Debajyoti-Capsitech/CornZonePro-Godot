@@ -136,6 +136,11 @@ func single_player()->void:
 	# toggle_canvas($MapSelectScreen)
 	# _start_match("Single")
 
+func vs_bot()->void:
+	GameSession.selected_mode="VSBot"
+	GameSession.required_ui="VSBot"
+	map_select_data()
+
 func map_select_data()->void:
 	if is_instance_valid(map_select_screen) and map_select_screen.has_method("refresh_map_locks"):
 		map_select_screen.refresh_map_locks()

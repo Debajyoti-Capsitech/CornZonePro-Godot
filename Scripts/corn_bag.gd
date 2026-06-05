@@ -26,10 +26,12 @@ var throw_trail_active: bool = false
 @export var throw_trail_lifetime: float = 0.35
 @export var throw_trail_speed_threshold: float = 0.5
 @export var throw_ribbon_width: float = 0.22
-@export var throw_ribbon_min_point_distance: float = 0.18
-@export var throw_ribbon_max_points: int = 10
+@export var throw_ribbon_min_point_distance: float = 0.09
+@export var throw_ribbon_max_points: int = 20
 
 var micro_interaction_img = "res://Texture Or Sprites/MicroInteractions/oops.png"
+var _cached_camera: Camera3D = null
+var active_spirit: Sprite3D = null
 
 func _ready() -> void:
 	add_to_group("active_bag")
@@ -45,6 +47,9 @@ func _ready() -> void:
 	contact_monitor = true
 	max_contacts_reported = 8
 
+	linear_damp_mode = RigidBody3D.DAMP_MODE_REPLACE
+	angular_damp_mode = RigidBody3D.DAMP_MODE_REPLACE
+
 	if not swipe_controller.swipe_completed.is_connected(_on_swipe_completed):
 		swipe_controller.swipe_completed.connect(_on_swipe_completed)
 
@@ -53,6 +58,7 @@ func _ready() -> void:
 
 	_apply_bag_visual()
 	_setup_throw_trail()
+	_spawn_spirit_animal()
 	set_process(false)
 
 func _process(delta: float) -> void:
@@ -171,13 +177,29 @@ func _update_throw_ribbon(delta: float, trail_should_emit: bool) -> void:
 	_rebuild_throw_ribbon()
 
 
+func _get_camera() -> Camera3D:
+	if not is_instance_valid(_cached_camera):
+		_cached_camera = get_viewport().get_camera_3d()
+	return _cached_camera
+
 func _rebuild_throw_ribbon() -> void:
 	if throw_ribbon_mesh == null:
 		return
 
 	throw_ribbon_mesh.clear_surfaces()
 
-	var points_count := throw_trail_points.size()
+	# Create temporary duplicates and inject the current bag position at the end
+	# so that the trail remains perfectly attached to the bag
+	var render_points := throw_trail_points.duplicate()
+	var render_ages := throw_trail_point_ages.duplicate()
+
+	if throw_trail_active:
+		var current_pos := global_position
+		if render_points.is_empty() or current_pos.distance_squared_to(render_points[-1]) > 0.0001:
+			render_points.append(current_pos)
+			render_ages.append(0.0)
+
+	var points_count := render_points.size()
 	if points_count < 2:
 		return
 
@@ -188,7 +210,7 @@ func _rebuild_throw_ribbon() -> void:
 	colors.resize(points_count)
 
 	for i in range(points_count):
-		var age := float(throw_trail_point_ages[i])
+		var age := float(render_ages[i])
 		var fade := clampf(1.0 - (age / throw_trail_lifetime), 0.0, 1.0)
 		fades[i] = fade
 
@@ -196,12 +218,12 @@ func _rebuild_throw_ribbon() -> void:
 		color.a = throw_trail_color.a * fade * fade
 		colors[i] = color
 
-	var camera := get_viewport().get_camera_3d()
+	var camera := _get_camera()
 	throw_ribbon_mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLES)
 
 	for index in range(1, points_count):
-		var previous_position: Vector3 = throw_trail_points[index - 1]
-		var current_position: Vector3 = throw_trail_points[index]
+		var previous_position: Vector3 = render_points[index - 1]
+		var current_position: Vector3 = render_points[index]
 		var segment_direction := current_position - previous_position
 		if segment_direction.length_squared() <= 0.0001:
 			continue
@@ -277,6 +299,17 @@ func _stop_throw_trail() -> void:
 	set_process(false)
 
 func _start_throw_physics(direction: Vector3, strength: float) -> void:
+	if is_instance_valid(active_spirit):
+		var fade_out_tween := create_tween().set_parallel(true)
+		fade_out_tween.tween_property(active_spirit, "modulate:a", 0.0, 0.2)
+		fade_out_tween.tween_property(active_spirit, "scale", Vector3.ZERO, 0.2)
+		var spirit_to_free = active_spirit
+		fade_out_tween.finished.connect(func():
+			if is_instance_valid(spirit_to_free):
+				spirit_to_free.queue_free()
+		)
+		active_spirit = null
+
 	freeze = false
 	sleeping = false
 	gravity_scale = throw_gravity_scale
@@ -292,6 +325,10 @@ func _start_throw_physics(direction: Vector3, strength: float) -> void:
 
 func _on_swipe_completed(direction: Vector3, strength: float) -> void:
 	if thrown or throw_requested:
+		return
+
+	# If VSBot mode and it is the Bot's turn (P2), do not allow player swipe
+	if GameSession.selected_mode == "VSBot" and GameSession.current_turn == 2:
 		return
 
 	# Offline
@@ -376,6 +413,7 @@ func request_next_bag() -> void:
 	var uses_bag_result_slots := (
 		GameSession.selected_mode == "PassPlay"
 		or GameSession.selected_mode == "Local"
+		or GameSession.selected_mode == "VSBot"
 	)
 
 	if uses_bag_result_slots:
@@ -464,3 +502,107 @@ func _handle_ground_after_board() -> void:
 
 	if GameSession.selected_mode == "Local" and GameSession.mode_logic and GameSession.mode_logic.has_method("sync_match_state"):
 		GameSession.mode_logic.sync_match_state()
+
+
+func _spawn_spirit_animal() -> void:
+	var throw_player := int(get_meta("throw_player", 1))
+	var bag_config: BagConfig = null
+
+	if (
+		GameSession.selected_mode == "Local"
+		or GameSession.selected_mode == "PassPlay"
+	):
+		bag_config = NetworkManager.get_bag_config_for_player(throw_player)
+	else:
+		bag_config = NetworkManager.get_bag_config_by_id(NetworkManager.get_local_bag_id())
+
+	if not bag_config:
+		return
+
+	if bag_config.rarity != BagConfig.Rarity.Rare and bag_config.rarity != BagConfig.Rarity.Epic:
+		return
+
+	var bag_name_lower := bag_config.bag_name.to_lower()
+	var texture_path := ""
+
+	match bag_name_lower:
+		"arctic": texture_path = "res://Texture Or Sprites/Animals/ice_wolf.png"
+		"camouflage": texture_path = "res://Texture Or Sprites/Animals/nature_tiger.png"
+		"shield": texture_path = "res://Texture Or Sprites/Animals/golden_dragon.png"
+		"target": texture_path = "res://Texture Or Sprites/Animals/thunder_eagle.png"
+		"rogue": texture_path = "res://Texture Or Sprites/Animals/shadow_panther.png"
+		"neon": texture_path = "res://Texture Or Sprites/Animals/fire_phoenix.png"
+
+	if texture_path == "" or not ResourceLoader.exists(texture_path):
+		return
+
+	var tex = load(texture_path)
+	if tex == null:
+		return
+
+	var sprite := Sprite3D.new()
+	sprite.name = "SpiritAnimal"
+	sprite.texture = tex
+	sprite.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	sprite.shaded = false
+	sprite.double_sided = true
+	sprite.top_level = true
+
+	var mat := StandardMaterial3D.new()
+	mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	mat.blend_mode = BaseMaterial3D.BLEND_MODE_ADD
+	mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	mat.cull_mode = BaseMaterial3D.CULL_DISABLED
+	mat.albedo_texture = tex
+	sprite.material_override = mat
+
+	sprite.modulate.a = 0.0
+	sprite.scale = Vector3.ZERO
+	sprite.global_position = global_position
+	sprite.global_position.y += 0.1
+
+	add_child(sprite)
+	active_spirit = sprite
+
+	var tween := create_tween().set_parallel(true)
+	var target_pos := global_position + Vector3(0, 0.8, 0)
+	var target_scale := Vector3.ONE * 0.7
+
+	tween.tween_property(sprite, "scale", target_scale, 0.8)\
+		.set_trans(Tween.TRANS_BACK)\
+		.set_ease(Tween.EASE_OUT)
+
+	tween.tween_property(sprite, "modulate:a", 1.0, 0.6)\
+		.set_trans(Tween.TRANS_SINE)\
+		.set_ease(Tween.EASE_OUT)
+
+	tween.tween_property(sprite, "global_position", target_pos, 0.8)\
+		.set_trans(Tween.TRANS_CUBIC)\
+		.set_ease(Tween.EASE_OUT)
+
+	var seq_tween := create_tween()
+	seq_tween.tween_interval(0.8)
+
+	var bob_up := target_pos + Vector3(0, 0.1, 0)
+	var bob_down := target_pos - Vector3(0, 0.1, 0)
+
+	seq_tween.tween_property(sprite, "global_position:y", bob_up.y, 0.6)\
+		.set_trans(Tween.TRANS_SINE)\
+		.set_ease(Tween.EASE_IN_OUT)
+	seq_tween.tween_property(sprite, "global_position:y", bob_down.y, 0.6)\
+		.set_trans(Tween.TRANS_SINE)\
+		.set_ease(Tween.EASE_IN_OUT)
+
+	seq_tween.finished.connect(func():
+		if is_instance_valid(sprite):
+			var fade_out_tween := create_tween().set_parallel(true)
+			fade_out_tween.tween_property(sprite, "modulate:a", 0.0, 0.6)
+			fade_out_tween.tween_property(sprite, "scale", Vector3.ZERO, 0.6)
+			fade_out_tween.tween_property(sprite, "global_position:y", sprite.global_position.y + 0.3, 0.6)
+			fade_out_tween.finished.connect(func():
+				if is_instance_valid(sprite):
+					sprite.queue_free()
+				if active_spirit == sprite:
+					active_spirit = null
+			)
+	)

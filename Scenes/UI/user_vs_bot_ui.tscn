@@ -1,0 +1,1257 @@
+[gd_scene format=3 uid="uid://bh8t5ucs1w4kn"]
+
+[ext_resource type="Script" uid="uid://cujvpii4nvqx8" path="res://Scripts/user_vs_bot_ui.gd" id="1_root"]
+[ext_resource type="Texture2D" uid="uid://dcvrn8vpg34e8" path="res://Texture Or Sprites/SinglePlayer/Group 309.png" id="2_7s7w4"]
+[ext_resource type="Script" uid="uid://brgpmwpcv7a4k" path="res://Scripts/VSBot/in_game_ui.gd" id="2_ingame"]
+[ext_resource type="Texture2D" uid="uid://mtx40gu2p1hh" path="res://Texture Or Sprites/Multiplayer/ScoreBoard.png" id="3_ajpdk"]
+[ext_resource type="Texture2D" uid="uid://dvf1tnqw6o70h" path="res://Texture Or Sprites/Multiplayer/player1 score.png" id="4_c04pc"]
+[ext_resource type="Texture2D" uid="uid://dh6vyiwxacav2" path="res://Texture Or Sprites/Multiplayer/pointerbox.png" id="5_8npcu"]
+[ext_resource type="FontFile" uid="uid://k1fhn3g4drkk" path="res://Fonts/Qiproko Trial Extended.ttf" id="6_j7th6"]
+[ext_resource type="Texture2D" uid="uid://khkdtkfjx0tc" path="res://Texture Or Sprites/Multiplayer/Player 2 score.png" id="7_nlpdm"]
+[ext_resource type="Texture2D" uid="uid://bc6lh5f14uf5x" path="res://Texture Or Sprites/Multiplayer/Player1Turn.png" id="8_53clp"]
+[ext_resource type="Texture2D" uid="uid://t8q5mx2wr1n3" path="res://Texture Or Sprites/Multiplayer/Player2Turn.png" id="9_uhfn7"]
+[ext_resource type="Script" uid="uid://ob0mtg5jdffr" path="res://Scripts/VSBot/pause_menu.gd" id="10_n03io_new"]
+[ext_resource type="Texture2D" uid="uid://br2f810pal41w" path="res://Texture Or Sprites/SinglePlayer/PanelsBg.png" id="11_oaht2"]
+[ext_resource type="Texture2D" uid="uid://cq48i81ursqx3" path="res://Texture Or Sprites/SinglePlayer/pausedbg.png" id="12_c2u70"]
+[ext_resource type="Texture2D" uid="uid://upq0lyqb8g3w" path="res://Texture Or Sprites/SinglePlayer/Panel Button BG.png" id="13_q0dux"]
+[ext_resource type="Texture2D" uid="uid://bqnun5nbf26i8" path="res://Texture Or Sprites/SinglePlayer/cross.png" id="14_tyy1l"]
+[ext_resource type="Script" uid="uid://mh4yhpy7kgjy" path="res://Scripts/VSBot/game_over.gd" id="15_0yj45_new"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_laimd"]
+texture = ExtResource("2_7s7w4")
+modulate_color = Color(0.34901962, 0.3529412, 0.36862746, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_cg1ig"]
+texture = ExtResource("2_7s7w4")
+modulate_color = Color(0.34901962, 0.3529412, 0.36862746, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_j4250"]
+texture = ExtResource("2_7s7w4")
+modulate_color = Color(0.34901962, 0.3529412, 0.36862746, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_blue_card"]
+bg_color = Color(0.02, 0.08, 0.18, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.1, 0.6, 1, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+shadow_color = Color(0.1, 0.6, 1, 0.3)
+shadow_size = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_level_badge"]
+bg_color = Color(0.05, 0.1, 0.25, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 0.8, 0.1, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_orange_card"]
+bg_color = Color(0.08, 0.05, 0.02, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.6, 0.1, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+shadow_color = Color(1, 0.6, 0.1, 0.3)
+shadow_size = 15
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8ojcy"]
+texture = ExtResource("14_tyy1l")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_pyane"]
+texture = ExtResource("14_tyy1l")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2iomb"]
+texture = ExtResource("14_tyy1l")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_detail_panel"]
+bg_color = Color(0.02, 0.05, 0.1, 0.7)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.1, 0.3, 0.6, 0.5)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_c4pug"]
+texture = ExtResource("13_q0dux")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_3tj46"]
+texture = ExtResource("13_q0dux")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_umbsn"]
+texture = ExtResource("13_q0dux")
+
+[node name="user vs bot_ui" type="Node" unique_id=1132116255]
+script = ExtResource("1_root")
+
+[node name="InGame UI" type="CanvasLayer" parent="." unique_id=909182139]
+script = ExtResource("2_ingame")
+
+[node name="Black Bg" type="TextureRect" parent="InGame UI" unique_id=1583866341]
+visible = false
+self_modulate = Color(18.892157, 18.892157, 18.892157, 1)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("11_oaht2")
+expand_mode = 3
+
+[node name="Pause Button" type="Button" parent="InGame UI" unique_id=912048105]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -60.0
+offset_top = 39.0
+offset_right = -23.0
+offset_bottom = 78.0
+grow_horizontal = 0
+theme_override_styles/normal = SubResource("StyleBoxTexture_laimd")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_cg1ig")
+theme_override_styles/hover = SubResource("StyleBoxTexture_j4250")
+
+[node name="Player1TurnUI" type="TextureRect" parent="InGame UI" unique_id=1973071489]
+visible = false
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -114.773224
+offset_top = -220.0
+offset_right = 114.773224
+offset_bottom = -180.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("8_53clp")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="Text" type="Label" parent="InGame UI/Player1TurnUI" unique_id=1401295534]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -76.0
+offset_top = -14.0
+offset_right = 77.0
+offset_bottom = 11.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 20
+text = "Player 1's turn"
+
+[node name="Player2TurnUI" type="TextureRect" parent="InGame UI" unique_id=684965788]
+visible = false
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -115.0
+offset_top = -219.0
+offset_right = 114.54645
+offset_bottom = -179.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("9_uhfn7")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="Text" type="Label" parent="InGame UI/Player2TurnUI" unique_id=2091574986]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -67.773224
+offset_top = -16.0
+offset_right = 67.226776
+offset_bottom = 9.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 20
+text = "Bot's turn"
+
+[node name="VS_IntroPanel" type="Control" parent="InGame UI" unique_id=1234567890]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="TextureRect" parent="InGame UI/VS_IntroPanel" unique_id=1234567891]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Header" type="Label" parent="InGame UI/VS_IntroPanel" unique_id=1234567892]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -200.0
+offset_top = 40.0
+offset_right = 200.0
+offset_bottom = 110.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.5)
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 40
+text = "MATCH FOUND!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SubHeader" type="Label" parent="InGame UI/VS_IntroPanel" unique_id=1234567893]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -200.0
+offset_top = 95.0
+offset_right = 200.0
+offset_bottom = 135.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.7, 0.85, 1, 1)
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 18
+text = "Get Ready for the Battle"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="YouCard" type="Control" parent="InGame UI/VS_IntroPanel" unique_id=1234567894]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -215.0
+offset_top = -180.0
+offset_right = -15.0
+offset_bottom = 140.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelGlow" type="Panel" parent="InGame UI/VS_IntroPanel/YouCard" unique_id=1234567895]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_blue_card")
+
+[node name="HeaderLabel" type="Label" parent="InGame UI/VS_IntroPanel/YouCard" unique_id=1234567896]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -90.0
+offset_top = 10.0
+offset_right = 90.0
+offset_bottom = 40.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.3, 0.75, 1, 1)
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 22
+text = "YOU"
+horizontal_alignment = 1
+
+[node name="Avatar" type="TextureRect" parent="InGame UI/VS_IntroPanel/YouCard" unique_id=1234567897]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -60.0
+offset_top = -90.0
+offset_right = 60.0
+offset_bottom = 30.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="LevelBadge" type="Label" parent="InGame UI/VS_IntroPanel/YouCard" unique_id=1234567898]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -80.0
+offset_top = -10.0
+offset_right = -50.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxFlat_level_badge")
+text = "12"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="NameLabel" type="Label" parent="InGame UI/VS_IntroPanel/YouCard" unique_id=1234567899]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -90.0
+offset_top = -110.0
+offset_right = 90.0
+offset_bottom = -80.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 18
+text = "YOU"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StarsRow" type="HBoxContainer" parent="InGame UI/VS_IntroPanel/YouCard" unique_id=1234567900]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -80.0
+offset_top = -75.0
+offset_right = 80.0
+offset_bottom = -45.0
+grow_horizontal = 2
+grow_vertical = 0
+alignment = 1
+
+[node name="Icon" type="Label" parent="InGame UI/VS_IntroPanel/YouCard/StarsRow" unique_id=1234567901]
+layout_mode = 2
+text = "🎮"
+horizontal_alignment = 1
+
+[node name="Val" type="Label" parent="InGame UI/VS_IntroPanel/YouCard/StarsRow" unique_id=1234567902]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 16
+text = " 1250"
+
+[node name="TrophiesRow" type="HBoxContainer" parent="InGame UI/VS_IntroPanel/YouCard" unique_id=1234567903]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -80.0
+offset_top = -40.0
+offset_right = 80.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 0
+alignment = 1
+
+[node name="Icon" type="Label" parent="InGame UI/VS_IntroPanel/YouCard/TrophiesRow" unique_id=1234567904]
+layout_mode = 2
+text = "🏺"
+horizontal_alignment = 1
+
+[node name="Val" type="Label" parent="InGame UI/VS_IntroPanel/YouCard/TrophiesRow" unique_id=1234567905]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 16
+text = " 125"
+
+[node name="BotCard" type="Control" parent="InGame UI/VS_IntroPanel" unique_id=1234567906]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 15.0
+offset_top = -180.0
+offset_right = 215.0
+offset_bottom = 140.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelGlow" type="Panel" parent="InGame UI/VS_IntroPanel/BotCard" unique_id=1234567907]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_orange_card")
+
+[node name="HeaderLabel" type="Label" parent="InGame UI/VS_IntroPanel/BotCard" unique_id=1234567908]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -90.0
+offset_top = 10.0
+offset_right = 90.0
+offset_bottom = 40.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 0.6, 0.1, 1)
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 22
+text = "HARD BOT"
+horizontal_alignment = 1
+
+[node name="Avatar" type="TextureRect" parent="InGame UI/VS_IntroPanel/BotCard" unique_id=1234567909]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -60.0
+offset_top = -90.0
+offset_right = 60.0
+offset_bottom = 30.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="LevelBadge" type="Label" parent="InGame UI/VS_IntroPanel/BotCard" unique_id=1234567910]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 50.0
+offset_top = -10.0
+offset_right = 80.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxFlat_level_badge")
+text = "8"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="NameLabel" type="Label" parent="InGame UI/VS_IntroPanel/BotCard" unique_id=1234567911]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -90.0
+offset_top = -110.0
+offset_right = 90.0
+offset_bottom = -80.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 18
+text = "Hav0cmaster8"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StarsRow" type="HBoxContainer" parent="InGame UI/VS_IntroPanel/BotCard" unique_id=1234567912]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -80.0
+offset_top = -75.0
+offset_right = 80.0
+offset_bottom = -45.0
+grow_horizontal = 2
+grow_vertical = 0
+alignment = 1
+
+[node name="Icon" type="Label" parent="InGame UI/VS_IntroPanel/BotCard/StarsRow" unique_id=1234567913]
+layout_mode = 2
+text = "🎮"
+horizontal_alignment = 1
+
+[node name="Val" type="Label" parent="InGame UI/VS_IntroPanel/BotCard/StarsRow" unique_id=1234567914]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 16
+text = " 1400"
+
+[node name="TrophiesRow" type="HBoxContainer" parent="InGame UI/VS_IntroPanel/BotCard" unique_id=1234567915]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -80.0
+offset_top = -40.0
+offset_right = 80.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 0
+alignment = 1
+
+[node name="Icon" type="Label" parent="InGame UI/VS_IntroPanel/BotCard/TrophiesRow" unique_id=1234567916]
+layout_mode = 2
+text = "🏺"
+horizontal_alignment = 1
+
+[node name="Val" type="Label" parent="InGame UI/VS_IntroPanel/BotCard/TrophiesRow" unique_id=1234567917]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 16
+text = " 180"
+
+[node name="VSLogo" type="TextureRect" parent="InGame UI/VS_IntroPanel" unique_id=1234567918]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -80.0
+offset_top = -80.0
+offset_right = 80.0
+offset_bottom = 80.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="CloseButton" type="Button" parent="InGame UI/VS_IntroPanel" unique_id=1234567919]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -60.0
+offset_top = 30.0
+offset_right = -20.0
+offset_bottom = 70.0
+grow_horizontal = 0
+theme_override_styles/normal = SubResource("StyleBoxTexture_8ojcy")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_pyane")
+theme_override_styles/hover = SubResource("StyleBoxTexture_2iomb")
+
+[node name="MatchDetails" type="HBoxContainer" parent="InGame UI/VS_IntroPanel" unique_id=1234567920]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -215.0
+offset_top = -140.0
+offset_right = 215.0
+offset_bottom = -90.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 15
+alignment = 1
+
+[node name="WindPanel" type="Panel" parent="InGame UI/VS_IntroPanel/MatchDetails" unique_id=1234567921]
+custom_minimum_size = Vector2(130, 45)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_detail_panel")
+
+[node name="Label" type="Label" parent="InGame UI/VS_IntroPanel/MatchDetails/WindPanel" unique_id=1234567922]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -65.0
+offset_top = -15.0
+offset_right = 65.0
+offset_bottom = 15.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 12
+text = "💨 WIND
+15 KM/H ➔➔➔"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RoundPanel" type="Panel" parent="InGame UI/VS_IntroPanel/MatchDetails" unique_id=1234567923]
+custom_minimum_size = Vector2(130, 45)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_detail_panel")
+
+[node name="Label" type="Label" parent="InGame UI/VS_IntroPanel/MatchDetails/RoundPanel" unique_id=1234567924]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -65.0
+offset_top = -15.0
+offset_right = 65.0
+offset_bottom = 15.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 12
+text = "💿 ROUND
+5 ROUNDS"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TimePanel" type="Panel" parent="InGame UI/VS_IntroPanel/MatchDetails" unique_id=1234567925]
+custom_minimum_size = Vector2(130, 45)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_detail_panel")
+
+[node name="Label" type="Label" parent="InGame UI/VS_IntroPanel/MatchDetails/TimePanel" unique_id=1234567926]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -65.0
+offset_top = -15.0
+offset_right = 65.0
+offset_bottom = 15.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 12
+text = "⏱️ TIME LIMIT
+60 SEC"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BottomSection" type="VBoxContainer" parent="InGame UI/VS_IntroPanel" unique_id=1234567927]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -200.0
+offset_top = -80.0
+offset_right = 200.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 5
+alignment = 1
+
+[node name="CountdownLabel" type="Label" parent="InGame UI/VS_IntroPanel/BottomSection" unique_id=1234567928]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 15
+text = "Match starting in 5..."
+horizontal_alignment = 1
+
+[node name="ProgressBar" type="TextureProgressBar" parent="InGame UI/VS_IntroPanel/BottomSection" unique_id=1234567929]
+custom_minimum_size = Vector2(300, 8)
+layout_mode = 2
+size_flags_horizontal = 4
+value = 100.0
+nine_patch_stretch = true
+texture_under = ExtResource("3_ajpdk")
+texture_progress = ExtResource("3_ajpdk")
+tint_under = Color(0.1, 0.2, 0.4, 0.5)
+tint_progress = Color(0.1, 0.6, 1, 1)
+
+[node name="TipLabel" type="Label" parent="InGame UI/VS_IntroPanel/BottomSection" unique_id=1234567930]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 0.8, 1, 0.7)
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 10
+text = "🎯 TIP: Wind affects your throw! Adjust your aim carefully."
+horizontal_alignment = 1
+
+[node name="User  1 Scores" type="TextureRect" parent="InGame UI" unique_id=1391214481]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 33.0
+offset_top = -590.0
+offset_right = 204.192
+offset_bottom = -555.0
+grow_vertical = 0
+texture = ExtResource("4_c04pc")
+expand_mode = 3
+stretch_mode = 4
+
+[node name="p1" type="TextureRect" parent="InGame UI/User  1 Scores" unique_id=2049918451]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 11.0
+offset_top = -9.5
+offset_right = 30.0
+offset_bottom = 9.5
+grow_vertical = 2
+texture = ExtResource("5_8npcu")
+expand_mode = 3
+stretch_mode = 4
+
+[node name="p2" type="TextureRect" parent="InGame UI/User  1 Scores" unique_id=1158478517]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -34.5
+offset_top = -9.5
+offset_right = -15.5
+offset_bottom = 9.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_8npcu")
+expand_mode = 3
+stretch_mode = 4
+
+[node name="p3" type="TextureRect" parent="InGame UI/User  1 Scores" unique_id=1916889217]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 8.500015
+offset_top = -9.5
+offset_right = 27.500015
+offset_bottom = 9.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_8npcu")
+expand_mode = 3
+stretch_mode = 4
+
+[node name="p4" type="TextureRect" parent="InGame UI/User  1 Scores" unique_id=1895152567]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -33.0
+offset_top = -9.5
+offset_right = -14.0
+offset_bottom = 9.5
+grow_horizontal = 0
+grow_vertical = 2
+texture = ExtResource("5_8npcu")
+expand_mode = 3
+stretch_mode = 4
+
+[node name="Player 1 Heading" type="Label" parent="InGame UI/User  1 Scores" unique_id=881892415]
+layout_mode = 1
+offset_top = -19.0
+offset_right = 64.0
+offset_bottom = 4.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 10
+text = "User"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Bot 2 Scores" type="TextureRect" parent="InGame UI" unique_id=2001186130]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -208.73502
+offset_top = -591.0
+offset_right = -37.03302
+offset_bottom = -556.0
+grow_horizontal = 0
+grow_vertical = 0
+texture = ExtResource("7_nlpdm")
+expand_mode = 3
+stretch_mode = 4
+
+[node name="p1" type="TextureRect" parent="InGame UI/Bot 2 Scores" unique_id=1158268154]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 10.0
+offset_top = -9.5
+offset_right = 29.0
+offset_bottom = 9.5
+grow_vertical = 2
+texture = ExtResource("5_8npcu")
+expand_mode = 3
+stretch_mode = 4
+
+[node name="p2" type="TextureRect" parent="InGame UI/Bot 2 Scores" unique_id=495228843]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -30.5
+offset_top = -9.5
+offset_right = -11.5
+offset_bottom = 9.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_8npcu")
+expand_mode = 3
+stretch_mode = 4
+
+[node name="p3" type="TextureRect" parent="InGame UI/Bot 2 Scores" unique_id=1003801824]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 11.5
+offset_top = -9.5
+offset_right = 30.5
+offset_bottom = 9.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_8npcu")
+expand_mode = 3
+stretch_mode = 4
+
+[node name="p4" type="TextureRect" parent="InGame UI/Bot 2 Scores" unique_id=1176588000]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -30.0
+offset_top = -9.5
+offset_right = -11.0
+offset_bottom = 9.5
+grow_horizontal = 0
+grow_vertical = 2
+texture = ExtResource("5_8npcu")
+expand_mode = 3
+stretch_mode = 4
+
+[node name="Player 2 Heading" type="Label" parent="InGame UI/Bot 2 Scores" unique_id=884039044]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -67.96698
+offset_top = -19.0
+offset_right = -3.0
+offset_bottom = 4.0
+grow_horizontal = 0
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 10
+text = "Bot"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PauseMenu" type="CanvasLayer" parent="." unique_id=931273557]
+visible = false
+script = ExtResource("10_n03io_new")
+
+[node name="Black Bg" type="TextureRect" parent="PauseMenu" unique_id=1828436742]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("11_oaht2")
+expand_mode = 3
+
+[node name="Control" type="Control" parent="PauseMenu" unique_id=732848355]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PausePanel BG" type="TextureRect" parent="PauseMenu/Control" unique_id=164938270]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -185.0
+offset_top = -222.50002
+offset_right = 185.0
+offset_bottom = 222.50002
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("12_c2u70")
+expand_mode = 5
+stretch_mode = 4
+
+[node name="Label" type="Label" parent="PauseMenu/Control/PausePanel BG" unique_id=371262007]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -58.0
+offset_top = 7.9253387
+offset_right = 58.0
+offset_bottom = 46.92534
+grow_horizontal = 2
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 30
+text = "Paused"
+
+[node name="Dash" type="Label" parent="PauseMenu/Control/PausePanel BG" unique_id=573641727]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -117.5
+offset_right = 25.0
+offset_bottom = -44.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 60
+text = "-"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Score Heading" type="Label" parent="PauseMenu/Control/PausePanel BG/Dash" unique_id=1457593753]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -24.5
+offset_top = -21.0
+offset_right = 24.5
+offset_bottom = 4.0
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 21
+text = "Score"
+
+[node name="Player 1 Score" type="Label" parent="PauseMenu/Control/PausePanel BG/Dash" unique_id=475149311]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -79.0
+offset_top = -27.5
+offset_right = -9.0
+offset_bottom = 33.5
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 50
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Player 2 Score" type="Label" parent="PauseMenu/Control/PausePanel BG/Dash" unique_id=2042343372]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 5.0
+offset_top = -27.5
+offset_right = 75.0
+offset_bottom = 33.5
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 50
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Home" type="Button" parent="PauseMenu/Control/PausePanel BG" unique_id=1203490241]
+custom_minimum_size = Vector2(265, 55)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -132.5
+offset_top = -18.5
+offset_right = 132.5
+offset_bottom = 36.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("StyleBoxTexture_c4pug")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_3tj46")
+theme_override_styles/hover = SubResource("StyleBoxTexture_umbsn")
+text = "Home"
+
+[node name="Restart" type="Button" parent="PauseMenu/Control/PausePanel BG" unique_id=950698527]
+custom_minimum_size = Vector2(265, 55)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -132.5
+offset_top = 57.5
+offset_right = 132.5
+offset_bottom = 112.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("StyleBoxTexture_c4pug")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_3tj46")
+theme_override_styles/hover = SubResource("StyleBoxTexture_umbsn")
+text = "Restart"
+
+[node name="Resume" type="Button" parent="PauseMenu/Control/PausePanel BG" unique_id=2055070708]
+custom_minimum_size = Vector2(265, 55)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -133.5
+offset_top = 132.5
+offset_right = 131.5
+offset_bottom = 187.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("StyleBoxTexture_c4pug")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_3tj46")
+theme_override_styles/hover = SubResource("StyleBoxTexture_umbsn")
+text = "Resume"
+
+[node name="Cross" type="Button" parent="PauseMenu/Control/PausePanel BG" unique_id=479330946]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -57.710938
+offset_top = 12.925339
+offset_right = -26.710938
+offset_bottom = 45.92534
+grow_horizontal = 0
+theme_override_styles/normal = SubResource("StyleBoxTexture_8ojcy")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_pyane")
+theme_override_styles/hover = SubResource("StyleBoxTexture_2iomb")
+
+[node name="GameOver" type="CanvasLayer" parent="." unique_id=876645840]
+visible = false
+script = ExtResource("15_0yj45_new")
+
+[node name="Black Bg" type="TextureRect" parent="GameOver" unique_id=26614636]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("11_oaht2")
+expand_mode = 3
+
+[node name="Control" type="Control" parent="GameOver" unique_id=127344837]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="GameOver BG" type="TextureRect" parent="GameOver/Control" unique_id=785994065]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -185.0
+offset_top = -222.5
+offset_right = 185.0
+offset_bottom = 222.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("12_c2u70")
+expand_mode = 5
+stretch_mode = 4
+
+[node name="Label" type="Label" parent="GameOver/Control/GameOver BG" unique_id=1062902477]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -48.0
+offset_top = 9.0
+offset_right = 48.0
+offset_bottom = 40.0
+grow_horizontal = 2
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 30
+text = "Result"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="WinnerAvatar" type="TextureRect" parent="GameOver/Control/GameOver BG" unique_id=1234567999]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -57.0
+offset_top = -149.0
+offset_right = 52.0
+offset_bottom = -43.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Home" type="Button" parent="GameOver/Control/GameOver BG" unique_id=1930182023]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -132.5
+offset_top = 45.0
+offset_right = 132.5
+offset_bottom = 100.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxTexture_c4pug")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_3tj46")
+theme_override_styles/hover = SubResource("StyleBoxTexture_umbsn")
+action_mode = 0
+text = "Home"
+
+[node name="Restart" type="Button" parent="GameOver/Control/GameOver BG" unique_id=892648632]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -132.5
+offset_top = 115.0
+offset_right = 132.5
+offset_bottom = 170.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxTexture_c4pug")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_3tj46")
+theme_override_styles/hover = SubResource("StyleBoxTexture_umbsn")
+text = "Rematch"
+
+[node name="Share" type="Button" parent="GameOver/Control/GameOver BG" unique_id=689359040]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -99.9995
+offset_top = 105.4995
+offset_right = 100.0005
+offset_bottom = 140.4995
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxTexture_c4pug")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_3tj46")
+theme_override_styles/hover = SubResource("StyleBoxTexture_umbsn")
+text = "Share"
+
+[node name="Player Winner Declaration" type="Label" parent="GameOver/Control/GameOver BG" unique_id=1025921745]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -97.0
+offset_top = 199.5
+offset_right = 95.0
+offset_bottom = 232.5
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 27
+text = "Player X Wins"
+
+[connection signal="pressed" from="PauseMenu/Control/PausePanel BG/Home" to="PauseMenu" method="_on_home_pressed"]
+[connection signal="pressed" from="PauseMenu/Control/PausePanel BG/Restart" to="PauseMenu" method="_on_restart_pressed"]
+[connection signal="pressed" from="PauseMenu/Control/PausePanel BG/Resume" to="PauseMenu" method="_on_resume_pressed"]
+[connection signal="pressed" from="PauseMenu/Control/PausePanel BG/Cross" to="PauseMenu" method="_on_cross_pressed"]
+[connection signal="pressed" from="GameOver/Control/GameOver BG/Home" to="GameOver" method="_on_home_pressed"]
+[connection signal="pressed" from="GameOver/Control/GameOver BG/Restart" to="GameOver" method="_on_restart_pressed"]
