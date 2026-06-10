@@ -88,9 +88,10 @@ var my_id: int = 0
  
 var players: Dictionary = {}
  
-# UDP Discovery
-var udp := PacketPeerUDP.new()
-var broadcast_timer: Timer
+# WebRTC & Firebase Discovery
+var rtc_pc: WebRTCPeerConnection
+var _last_rtc_state: int = -1
+var _rooms_listener_ref
 var found_servers: Array = []
 var rematch_in_progress: bool = false
 var pending_rematch_requester_id: int = 0
@@ -133,6 +134,15 @@ var hosted_room_id: String = ""
  
 func _ready() -> void:
 	_connect_multiplayer_signals()
+
+func _process(delta: float) -> void:
+	if rtc_pc:
+		rtc_pc.poll()
+		var current_state = rtc_pc.get_connection_state()
+		if current_state != _last_rtc_state:
+			_last_rtc_state = current_state
+			_on_rtc_state_changed(current_state)
+
 # =========================
 # HOST
 # =========================
@@ -154,14 +164,19 @@ func host_game(room_name: String = "") -> void:
 	if normalized_room_name.is_empty():
 		normalized_room_name = hosted_room_name.strip_edges()
 	if normalized_room_name.is_empty():
-		normalized_room_name = "%s's Room" % Prefs.get_string("username", "Host")
+		normalized_room_name = "%s's Room" % (PlayerData.player_name if PlayerData.player_name != "" else "Host")
  
 	hosted_room_name = normalized_room_name
-	hosted_room_id = _normalize_room_id(hosted_room_name)
+	
+	# Generate a random 4-digit code if hosted_room_id is not already numeric
+	var normalized_id := _normalize_room_id(hosted_room_id)
+	if normalized_id.is_empty() or not normalized_id.is_valid_int():
+		hosted_room_id = str(randi_range(1000, 9999))
+	else:
+		hosted_room_id = normalized_id
  
-	var peer = ENetMultiplayerPeer.new()
- 
-	var error = peer.create_server(PORT, MAX_REMOTE_CLIENTS)
+	var peer = WebRTCMultiplayerPeer.new()
+	var error = peer.create_server()
  
 	if error != OK:
 		is_host = false
@@ -182,38 +197,67 @@ func host_game(room_name: String = "") -> void:
 	var my_data = {
 		"id": my_id,
 		"name": PlayerData.player_name,
+		"profile_index": Prefs.get_int("profile_index", 0),
 		"bag_id": get_local_bag_id(),
 		"board_id": get_local_board_id(),
-		"boards_owned": PlayerData.boards_owned.duplicate()
+		"boards_owned": PlayerData.boards_owned.duplicate(),
+		"matches_played": PlayerData.matches_played,
+		"total_pots": PlayerData.total_pots
 	}
  
 	players[my_id] = my_data
  
-	start_broadcast()
+	if not WebRTCSignaling.client_joined.is_connected(_on_webrtc_client_joined):
+		WebRTCSignaling.client_joined.connect(_on_webrtc_client_joined)
+		WebRTCSignaling.answer_received.connect(_on_webrtc_answer_received)
+		WebRTCSignaling.ice_candidate_received.connect(_on_webrtc_ice_candidate)
+ 
+	print("ROOM ID =", hosted_room_id)
+	print("ROOM NAME =", hosted_room_name)
+	
+	WebRTCSignaling.create_room(hosted_room_id, hosted_room_name, my_data)
  
  
 # =========================
 # JOIN
 # =========================
-func join_game(ip: String) -> void:
+func join_game(room_id: String) -> void:
 	if multiplayer.multiplayer_peer != null:
 		await get_tree().process_frame
 		disconnect_game()
 		await get_tree().process_frame
  
 	is_host = false
+	hosted_room_id = room_id
  
-	var peer = ENetMultiplayerPeer.new()
- 
-	var error = peer.create_client(ip, PORT)
+	var peer = WebRTCMultiplayerPeer.new()
+	var error = peer.create_client(2)
  
 	if error != OK:
 		connection_failed.emit()
 		return
  
 	multiplayer.multiplayer_peer = peer
- 
-	print("[Network] Connecting to:", ip)
+	my_id = 2
+	print("[Network] Connecting to room:", room_id)
+	
+	if not WebRTCSignaling.offer_received.is_connected(_on_webrtc_offer_received):
+		WebRTCSignaling.offer_received.connect(_on_webrtc_offer_received)
+		WebRTCSignaling.ice_candidate_received.connect(_on_webrtc_ice_candidate)
+		WebRTCSignaling.host_joined.connect(_on_webrtc_host_joined)
+		
+	var my_data = {
+		"id": my_id,
+		"name": PlayerData.player_name if PlayerData.player_name != "" else "Player",
+		"profile_index": Prefs.get_int("profile_index", 0),
+		"bag_id": get_local_bag_id(),
+		"board_id": get_local_board_id(),
+		"boards_owned": PlayerData.boards_owned.duplicate(),
+		"matches_played": PlayerData.matches_played,
+		"total_pots": PlayerData.total_pots
+	}
+	WebRTCSignaling.join_room(room_id, my_data)
+	_init_webrtc_pc(1)
  
  
 # =========================
@@ -224,9 +268,14 @@ func get_random_map() -> String:
  
  
 @rpc("any_peer", "reliable")
+func test_rpc(msg: String) -> void:
+	print(msg)
+
+@rpc("any_peer", "reliable")
 func register_player(data: Dictionary):
 	var sender_id = multiplayer.get_remote_sender_id()
 	if is_host and not players.has(sender_id) and players.size() >= MAX_PLAYERS:
+		print("[Network] Disconnecting peer in register_player due to full room. sender_id:", sender_id)
 		room_full_rpc.rpc_id(sender_id, "Room already full")
 		_disconnect_peer(sender_id)
 		return
@@ -234,18 +283,19 @@ func register_player(data: Dictionary):
 	players[sender_id] = data
  
 	print("[Network] Player registered:", sender_id)
+	player_connected.emit(sender_id)
  
 	if is_host and players.size() == MAX_PLAYERS:
-		print("[Network] Game Ready")
- 
-		var map = get_random_map()
-		_sync_and_start_match(map)
-		# start_match_rpc.rpc(map)
- 
-		# if multiplayer.is_server():
-		#   start_match_rpc(map)
- 
-		# game_ready.emit()
+		print("[Network] Game Ready - Waiting for Host to start")
+
+func host_start_game_manually() -> void:
+	if not is_host or players.size() < MAX_PLAYERS:
+		return
+	print("[Network] Host starting match manually...")
+	var map = GameSession.selected_map_path
+	if map == "":
+		map = get_random_map()
+	_sync_and_start_match(map)
  
  
 func _sync_and_start_match(map: String) -> void:
@@ -297,7 +347,13 @@ func start_match_rpc(map_path: String):
 	rematch_in_progress = false
 	_clear_rematch_request_state()
  
-	GameSession.start_match("Local", map_path, "Local", 20.0)
+	var match_ui = get_tree().current_scene.get_node_or_null("MatchUI")
+	if match_ui and match_ui.has_node("WaitingForPlayersUI"):
+		match_ui.get_node("WaitingForPlayersUI").visible = false
+		if match_ui.has_node("InGame UI"):
+			match_ui.get_node("InGame UI").visible = true
+			
+	GameSession.start_match("Multiplayer", map_path, "Multiplayer", 20.0)
  
 	SceneManager.preload_async(map_path)
  
@@ -446,7 +502,9 @@ func request_throw(direction: Vector3, strength: float) -> void:
 # =========================
 func _on_peer_connected(id: int) -> void:
 	print("[Network] Player connected:", id)
-	if is_host and players.size() >= MAX_PLAYERS:
+	print("DATA CHANNEL OPEN")
+	if is_host and players.size() >= MAX_PLAYERS and not players.has(id):
+		print("[Network] Disconnecting peer in _on_peer_connected due to full room. id:", id)
 		room_full_rpc.rpc_id(id, "Room already full")
 		_disconnect_peer(id)
 		return
@@ -478,15 +536,19 @@ func _on_connected_to_server() -> void:
 	   
 	var my_data = {
 		"id": my_id,
-		"name": Prefs.get_string("username", "Player"),
+		"name": PlayerData.player_name if PlayerData.player_name != "" else "Player",
+		"profile_index": Prefs.get_int("profile_index", 0),
 		"bag_id": get_local_bag_id(),
 		"board_id": get_local_board_id(),
-		"boards_owned": PlayerData.boards_owned.duplicate()
+		"boards_owned": PlayerData.boards_owned.duplicate(),
+		"matches_played": PlayerData.matches_played,
+		"total_pots": PlayerData.total_pots
 	}
  
 	register_player.rpc_id(1, my_data)
  
 	print("[Network] Connected ID:", my_id)
+	print("DATA CHANNEL OPEN")
  
  
 func _on_connection_failed() -> void:
@@ -512,11 +574,18 @@ func _on_server_disconnected() -> void:
 # DISCONNECT
 # =========================
 func disconnect_game() -> void:
+	print("[Network] disconnect_game() called from:")
+	print_stack()
 	if multiplayer.multiplayer_peer:
 		multiplayer.multiplayer_peer.close()
  
 	multiplayer.multiplayer_peer = null
- 
+
+	if rtc_pc:
+		rtc_pc.close()
+		rtc_pc = null
+	_last_rtc_state = -1
+
 	players.clear()
 	hosted_room_name = ""
 	hosted_room_id = ""
@@ -525,101 +594,153 @@ func disconnect_game() -> void:
  
 	is_host = false
 	my_id = 0
+	_webrtc_started = false
  
-	stop_broadcast()
 	stop_search()
- 
+	
+	# GameSession.selected_mode = "VSBot" # Reset back to VSBot when leaving multiplayer
+
+	WebRTCSignaling.leave_room()
+	if WebRTCSignaling.client_joined.is_connected(_on_webrtc_client_joined):
+		WebRTCSignaling.client_joined.disconnect(_on_webrtc_client_joined)
+	if WebRTCSignaling.host_joined.is_connected(_on_webrtc_host_joined):
+		WebRTCSignaling.host_joined.disconnect(_on_webrtc_host_joined)
+	if WebRTCSignaling.answer_received.is_connected(_on_webrtc_answer_received):
+		WebRTCSignaling.answer_received.disconnect(_on_webrtc_answer_received)
+		WebRTCSignaling.ice_candidate_received.disconnect(_on_webrtc_ice_candidate)
+	if WebRTCSignaling.offer_received.is_connected(_on_webrtc_offer_received):
+		WebRTCSignaling.offer_received.disconnect(_on_webrtc_offer_received)
+		WebRTCSignaling.ice_candidate_received.disconnect(_on_webrtc_ice_candidate)
+
 	print("[Network] Fully Disconnected")
  
 # =========================
-# BROADCAST
+# WEBRTC PEER CONNECTION
 # =========================
-func start_broadcast() -> void:
-	udp.close()
- 
-	udp.set_broadcast_enabled(true)
- 
-	udp.set_dest_address("255.255.255.255", DISCOVERY_PORT)
- 
-	broadcast_timer = Timer.new()
- 
-	broadcast_timer.wait_time = 1.0
-	broadcast_timer.autostart = true
- 
-	broadcast_timer.timeout.connect(_broadcast_ping)
- 
-	add_child(broadcast_timer)
- 
- 
-func _broadcast_ping() -> void:
-	var msg = {
-		"name": hosted_room_name if not hosted_room_name.is_empty() else Prefs.get_string("username", "Host"),
-		"room_id": hosted_room_id if not hosted_room_id.is_empty() else _normalize_room_id(Prefs.get_string("username", "Host")),
-		"player_count": players.size(),
-		"max_players": MAX_PLAYERS,
-		"port": PORT
-	}
- 
-	udp.put_packet(JSON.stringify(msg).to_utf8_buffer())
- 
- 
-func stop_broadcast() -> void:
-	if broadcast_timer:
-		broadcast_timer.queue_free()
-		broadcast_timer = null
- 
- 
+func _init_webrtc_pc(peer_id: int):
+	rtc_pc = WebRTCPeerConnection.new()
+	rtc_pc.initialize({
+		"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]
+	})
+	rtc_pc.session_description_created.connect(_on_pc_sdp_created)
+	rtc_pc.ice_candidate_created.connect(_on_pc_ice_candidate_created)
+	(multiplayer.multiplayer_peer as WebRTCMultiplayerPeer).add_peer(rtc_pc, peer_id)
+
+func _on_rtc_state_changed(state: int) -> void:
+	var state_str = "new"
+	match state:
+		WebRTCPeerConnection.STATE_NEW: state_str = "new"
+		WebRTCPeerConnection.STATE_CONNECTING: state_str = "connecting"
+		WebRTCPeerConnection.STATE_CONNECTED: state_str = "connected"
+		WebRTCPeerConnection.STATE_DISCONNECTED: state_str = "disconnected"
+		WebRTCPeerConnection.STATE_FAILED: state_str = "failed"
+		WebRTCPeerConnection.STATE_CLOSED: state_str = "closed"
+	print("WEBRTC STATE = ", state_str.to_upper())
+	if state == WebRTCPeerConnection.STATE_CONNECTED:
+		print("WEBRTC CONNECTED")
+		print("GAME READY")
+		await get_tree().create_timer(0.5).timeout
+		if is_host:
+			test_rpc.rpc("HELLO")
+
+var _webrtc_started: bool = false
+
+func _on_webrtc_client_joined(client_data: Dictionary) -> void:
+	if _webrtc_started: return
+	_webrtc_started = true
+	
+	print("CLIENT JOINED")
+	if typeof(client_data) == TYPE_DICTIONARY and client_data.has("id"):
+		var cid = int(client_data["id"])
+		players[cid] = client_data
+		player_connected.emit(cid)
+		
+	# Host WebRTC PC initialize karega aur Offer banayega
+	_init_webrtc_pc(2)
+	print("[WebRTC] Client joined. Creating offer...")
+	rtc_pc.create_offer()
+
+func _on_webrtc_host_joined(host_data: Dictionary) -> void:
+	print("HOST JOINED")
+	if typeof(host_data) == TYPE_DICTIONARY and host_data.has("id"):
+		var hid = int(host_data["id"])
+		players[hid] = host_data
+		player_connected.emit(hid)
+
+func _on_pc_sdp_created(type: String, sdp: String):
+	print("[WebRTC] SDP created: ", type)
+	rtc_pc.set_local_description(type, sdp)
+	if type == "offer":
+		WebRTCSignaling.send_offer(sdp)
+	elif type == "answer":
+		WebRTCSignaling.send_answer(sdp)
+
+func _on_pc_ice_candidate_created(media: String, index: int, name: String):
+	# print("[WebRTC] ICE Candidate created") # Too spammy
+	WebRTCSignaling.send_ice_candidate(media, index, name)
+
+func _on_webrtc_offer_received(sdp: String):
+	print("OFFER RECEIVED")
+	rtc_pc.set_remote_description("offer", sdp)
+	print("REMOTE DESCRIPTION SET")
+	rtc_pc.create_offer()
+	print("ANSWER CREATED")
+
+func _on_webrtc_answer_received(sdp: String):
+	print("ANSWER RECEIVED")
+	rtc_pc.set_remote_description("answer", sdp)
+
+func _on_webrtc_ice_candidate(media: String, index: int, name: String):
+	print("ICE RECEIVED")
+	rtc_pc.add_ice_candidate(media, index, name)
+	print("ICE EXCHANGED")
+
 # =========================
-# SEARCH
+# SEARCH (Firebase)
 # =========================
 func start_search() -> bool:
-	udp.close()
- 
 	found_servers.clear()
- 
-	var error := udp.bind(DISCOVERY_PORT)
-	if error != OK:
-		var message := "Unable to search for rooms: " + error_string(error)
-		push_error("[Network] " + message)
-		room_join_failed.emit(message)
-		return false
- 
-	#print("[Network] Searching...")
+	if _rooms_listener_ref:
+		_rooms_listener_ref.new_data_update.disconnect(_on_room_found)
+	_rooms_listener_ref = Firebase.Database.get_database_reference("webrtc_rooms")
+	_rooms_listener_ref.new_data_update.connect(_on_room_found)
 	return true
  
  
 func stop_search() -> void:
-	udp.close()
+	if _rooms_listener_ref:
+		_rooms_listener_ref.new_data_update.disconnect(_on_room_found)
+		_rooms_listener_ref = null
  
  
-func _process(_delta: float) -> void:
-	if udp.get_available_packet_count() > 0:
-		var packet = udp.get_packet()
- 
-		var ip = udp.get_packet_ip()
- 
-		var data = JSON.parse_string(packet.get_string_from_utf8())
- 
-		if typeof(data) != TYPE_DICTIONARY:
-			return
- 
+func _on_room_found(resource) -> void:
+	var data = resource.data
+	var path = resource.key
+	if typeof(data) != TYPE_DICTIONARY:
+		return
+		
+	if path == "" or path == "/":
+		for room_id in data.keys():
+			if typeof(data[room_id]) == TYPE_DICTIONARY:
+				_add_found_room(room_id, data[room_id])
+	else:
+		var room_id = path.replace("/", "")
+		_add_found_room(room_id, data)
+
+func _add_found_room(room_id: String, r: Dictionary):
+	if r.get("state") == "waiting":
 		var server = {
-			"name": data.get("name", "Unknown"),
-			"room_id": _normalize_room_id(str(data.get("room_id", data.get("name", "")))),
-			"ip": ip,
-			"player_count": int(data.get("player_count", 0)),
-			"max_players": int(data.get("max_players", MAX_PLAYERS)),
-			"port": data.get("port", PORT)
+			"name": r.get("name", "Unknown"),
+			"room_id": room_id,
+			"ip": room_id, # store room_id in ip to avoid breaking UI that uses ip for join_game
+			"player_count": 1,
+			"max_players": 2,
+			"port": 0
 		}
- 
 		for s in found_servers:
 			if s.ip == server.ip:
 				return
- 
 		found_servers.append(server)
- 
-		#print("[Network] Found:", server)
- 
 		server_found.emit(server)
  
  
@@ -742,7 +863,7 @@ func get_board_config_by_id(board_id: String) -> BoardConfig:
 	return BOARD_CONFIGS[DEFAULT_BOARD_ID] as BoardConfig
  
 func get_bag_id_for_player(player_index: int) -> String:
-	if GameSession.selected_mode == "Local":
+	if GameSession.selected_mode == "Local" or GameSession.selected_mode == "Multiplayer":
 		return _get_local_multiplayer_bag_id_for_player(player_index)
 	if GameSession.selected_mode == "PassPlay":
 		return _get_pass_play_bag_id_for_player(player_index)
@@ -755,7 +876,7 @@ func get_board_id_for_player(player_index: int) -> String:
 	return get_match_board_id()
  
 func get_match_board_id() -> String:
-	if GameSession.selected_mode == "Local":
+	if GameSession.selected_mode == "Local" or GameSession.selected_mode == "Multiplayer":
 		return _get_local_multiplayer_board_id()
  
 	return get_local_board_id()

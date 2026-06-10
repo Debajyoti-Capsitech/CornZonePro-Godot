@@ -33,6 +33,8 @@ var micro_interaction_img = "res://Texture Or Sprites/MicroInteractions/oops.png
 var _cached_camera: Camera3D = null
 var active_spirit: Sprite3D = null
 
+# Multiplayer authoritative physics sync removed to fix jitter
+
 func _ready() -> void:
 	add_to_group("active_bag")
 
@@ -75,6 +77,8 @@ func _process(delta: float) -> void:
 
 	_update_throw_ribbon(delta, trail_should_emit)
 
+
+
 func is_waiting_for_throw() -> bool:
 	return not thrown and not throw_requested
 
@@ -98,6 +102,7 @@ func _apply_bag_visual() -> void:
 	if (
 		GameSession.selected_mode == "Local"
 		or GameSession.selected_mode == "PassPlay"
+		or GameSession.selected_mode == "Multiplayer"
 	):
 		bag_config = NetworkManager.get_bag_config_for_player(throw_player)
 	else:
@@ -331,12 +336,12 @@ func _on_swipe_completed(direction: Vector3, strength: float) -> void:
 	if GameSession.selected_mode == "VSBot" and GameSession.current_turn == 2:
 		return
 
-	# Offline
-	if GameSession.selected_mode != "Local":
+	# Offline modes (Single, PassPlay, VSBot)
+	if GameSession.selected_mode != "Local" and GameSession.selected_mode != "Multiplayer":
 		_apply_throw(direction, strength)
 		return
 
-	# Multiplayer missing
+	# Local LAN / ENet Multiplayer
 	if not multiplayer or multiplayer.multiplayer_peer == null:
 		return
 
@@ -351,6 +356,9 @@ func _on_swipe_completed(direction: Vector3, strength: float) -> void:
 	else:
 		print("CLIENT sending RPC throw")
 		throw_requested = true
+
+		# Client-side prediction: instantly apply throw locally for a smooth, lag-free experience
+		_apply_throw(direction, strength)
 
 		# Tell host
 		NetworkManager.request_throw.rpc_id(1, direction, strength)
@@ -372,16 +380,16 @@ func _apply_throw(direction: Vector3, strength: float) -> void:
 
 	# Sync to clients
 	if (
-		GameSession.selected_mode == "Local"
+		(GameSession.selected_mode == "Local" or GameSession.selected_mode == "Multiplayer")
 		and multiplayer
 		and multiplayer.is_server()
 	):
 		sync_throw.rpc(direction, strength)
 
 	# Offline modes still need to advance the turn and spawn the next bag.
-	var should_schedule_next_bag := GameSession.selected_mode != "Local"
+	var should_schedule_next_bag := GameSession.selected_mode != "Local" and GameSession.selected_mode != "Multiplayer"
 	if (
-		GameSession.selected_mode == "Local"
+		(GameSession.selected_mode == "Local" or GameSession.selected_mode == "Multiplayer")
 		and multiplayer
 		and multiplayer.is_server()
 	):
@@ -395,6 +403,10 @@ func _apply_throw(direction: Vector3, strength: float) -> void:
 @rpc("authority", "reliable")
 func sync_throw(direction: Vector3, strength: float) -> void:
 	if multiplayer.is_server():
+		return
+
+	# Ignore server sync if the client already threw it (client-side prediction)
+	if thrown:
 		return
 
 	_start_throw_physics(direction, strength)
@@ -414,6 +426,7 @@ func request_next_bag() -> void:
 		GameSession.selected_mode == "PassPlay"
 		or GameSession.selected_mode == "Local"
 		or GameSession.selected_mode == "VSBot"
+		or GameSession.selected_mode == "Multiplayer"
 	)
 
 	if uses_bag_result_slots:
@@ -430,7 +443,7 @@ func request_next_bag() -> void:
 	if GameSession.match_over:
 		return
 
-	if GameSession.selected_mode == "Local":
+	if GameSession.selected_mode == "Local" or GameSession.selected_mode == "Multiplayer":
 		if multiplayer and multiplayer.is_server():
 			var spawn_point := get_parent()
 			if is_instance_valid(spawn_point):
@@ -479,7 +492,7 @@ func _is_ground_body(body: Node) -> bool:
 
 
 func _handle_ground_after_board() -> void:
-	if GameSession.selected_mode == "Local":
+	if GameSession.selected_mode == "Local" or GameSession.selected_mode == "Multiplayer":
 		if not multiplayer or multiplayer.multiplayer_peer == null or not multiplayer.is_server():
 			return
 
@@ -500,7 +513,7 @@ func _handle_ground_after_board() -> void:
 	if has_meta("bag_result_index"):
 		GameSession.update_bag_result(scoring_player, int(get_meta("bag_result_index")), 0)
 
-	if GameSession.selected_mode == "Local" and GameSession.mode_logic and GameSession.mode_logic.has_method("sync_match_state"):
+	if (GameSession.selected_mode == "Local" or GameSession.selected_mode == "Multiplayer") and GameSession.mode_logic and GameSession.mode_logic.has_method("sync_match_state"):
 		GameSession.mode_logic.sync_match_state()
 
 
@@ -511,6 +524,7 @@ func _spawn_spirit_animal() -> void:
 	if (
 		GameSession.selected_mode == "Local"
 		or GameSession.selected_mode == "PassPlay"
+		or GameSession.selected_mode == "Multiplayer"
 	):
 		bag_config = NetworkManager.get_bag_config_for_player(throw_player)
 	else:

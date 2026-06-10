@@ -19,7 +19,7 @@ enum Rarity {Standard, Epic, Rare}
 @export var min_pitch_angle: float = 10.0
 @export var max_pitch_angle: float = 45.0
 @export var min_bag_strength: float = 1.0
-@export var max_bag_strength: float = 20.0 # PowerShot
+@export var max_bag_strength: float = 19.0 # PowerShot
 
 @export_group("Visuals")
 #@export var bag_mesh: Mesh

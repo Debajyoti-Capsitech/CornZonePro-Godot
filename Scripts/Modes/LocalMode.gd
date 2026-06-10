@@ -8,7 +8,7 @@ var results_saved: bool = false
 
 
 func is_network_game() -> bool:
-	return GameSession.selected_mode == "Local"
+	return GameSession.selected_mode == "Local" or GameSession.selected_mode == "Multiplayer"
 
 
 func is_host() -> bool:

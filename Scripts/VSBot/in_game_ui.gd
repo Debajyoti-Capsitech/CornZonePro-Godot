@@ -44,8 +44,11 @@ func _ready() -> void:
 	# Initial score sync
 	_update_scores()
 	
-	# Select random bot details and slice avatar
-	_select_random_bot()
+	if GameSession.selected_mode == "Multiplayer":
+		_setup_multiplayer_opponent()
+	else:
+		# Select random bot details and slice avatar
+		_select_random_bot()
 
 	# Update Player name on the VS Card
 	var user_name_card := vs_intro_panel.get_node("YouCard/NameLabel") as Label
@@ -70,9 +73,32 @@ func _ready() -> void:
 		else:
 			avatar_rect.texture = load("res://Texture Or Sprites/Profile Screen/MaleIcon.png")
 
-	# Show VS intro panel and run countdown
-	vs_intro_panel.visible = true
-	_run_vs_countdown()
+	# Hide VS intro panel initially
+	vs_intro_panel.visible = false
+
+func start_vs_bot_match() -> void:
+	if GameSession.selected_mode == "Multiplayer":
+		vs_intro_panel.visible = false
+		if has_node("ScoreBoard"):
+			$ScoreBoard.visible = true
+		if has_node("User  1 Scores"):
+			$"User  1 Scores".visible = true
+		if has_node("Bot 2 Scores"):
+			$"Bot 2 Scores".visible = true
+		if has_node("Pause Button"):
+			$"Pause Button".visible = true
+		_on_turn_changed(GameSession.current_turn)
+	else:
+		vs_intro_panel.visible = true
+		vs_intro_panel.modulate.a = 1.0
+		_run_vs_countdown()
+	
+	# Start the spawn timer to spawn the first bag
+	var current_scene = get_tree().current_scene
+	if current_scene:
+		var start_timer = current_scene.get_node_or_null("StartTimer")
+		if start_timer:
+			start_timer.start()
 
 func _select_random_bot() -> void:
 	randomize()
@@ -136,6 +162,82 @@ func _select_random_bot() -> void:
 		var bot_avatar_rect := vs_intro_panel.get_node("BotCard/Avatar") as TextureRect
 		if bot_avatar_rect:
 			bot_avatar_rect.texture = atlas_tex
+
+func _setup_multiplayer_opponent() -> void:
+	# Get Player names
+	var p1_name = "Player 1"
+	var p2_name = "Player 2"
+	var p2_profile_index = 0
+	
+	if NetworkManager.players.has(1):
+		var p1_data = NetworkManager.players[1]
+		if typeof(p1_data) == TYPE_DICTIONARY and p1_data.has("name"):
+			p1_name = p1_data["name"]
+	if NetworkManager.players.has(2):
+		var p2_data = NetworkManager.players[2]
+		if typeof(p2_data) == TYPE_DICTIONARY:
+			if p2_data.has("name"):
+				p2_name = p2_data["name"]
+			if p2_data.has("profile_index"):
+				p2_profile_index = p2_data["profile_index"]
+
+	# Update Opponent name in matchmaking card (which is BotCard for the local player)
+	var opponent_name = p2_name if NetworkManager.is_host else p1_name
+	var opponent_profile_index = p2_profile_index if NetworkManager.is_host else (NetworkManager.players[1].get("profile_index", 0) if NetworkManager.players.has(1) else 0)
+	
+	var bot_name_card := vs_intro_panel.get_node("BotCard/NameLabel") as Label
+	if bot_name_card:
+		bot_name_card.text = opponent_name
+		
+	# Update Headings on in-game HUD ScoreBoard
+	var p1_heading := get_node_or_null("User  1 Scores/Player 1 Heading") as Label
+	if p1_heading:
+		p1_heading.text = p1_name
+		
+	var p2_heading := get_node_or_null("Bot 2 Scores/Player 2 Heading") as Label
+	if p2_heading:
+		p2_heading.text = p2_name
+		
+	# Set turn UI indicator text based on local player ID
+	var my_id = 1 if NetworkManager.is_host else 2
+	
+	if p1_turn_ui and p1_turn_ui.has_node("Text"):
+		var p1_turn_text = p1_turn_ui.get_node("Text") as Label
+		if my_id == 1:
+			p1_turn_text.text = "Your Turn"
+		else:
+			p1_turn_text.text = p1_name + "'s Turn"
+			
+	if p2_turn_ui and p2_turn_ui.has_node("Text"):
+		var p2_turn_text = p2_turn_ui.get_node("Text") as Label
+		if my_id == 2:
+			p2_turn_text.text = "Your Turn"
+		else:
+			p2_turn_text.text = p2_name + "'s Turn"
+
+	# Hide bot-specific difficulty
+	var right_header_label := vs_intro_panel.get_node("BotCard/HeaderLabel") as Label
+	if right_header_label:
+		right_header_label.text = "ONLINE MATCH"
+
+	# Hide stats for now since we don't sync them yet
+	var bot_lvl := vs_intro_panel.get_node("BotCard/LevelBadge") as Label
+	if bot_lvl:
+		bot_lvl.text = ""
+	var bot_stars := vs_intro_panel.get_node("BotCard/StarsRow/Val") as Label
+	if bot_stars:
+		bot_stars.text = " -"
+	var bot_trophies := vs_intro_panel.get_node("BotCard/TrophiesRow/Val") as Label
+	if bot_trophies:
+		bot_trophies.text = " -"
+
+	# Set default avatar for opponent
+	var bot_avatar_rect := vs_intro_panel.get_node("BotCard/Avatar") as TextureRect
+	if bot_avatar_rect:
+		if opponent_profile_index == 1:
+			bot_avatar_rect.texture = load("res://Texture Or Sprites/Profile Screen/FemaleIcon.png")
+		else:
+			bot_avatar_rect.texture = load("res://Texture Or Sprites/Profile Screen/MaleIcon.png")
 
 func _update_scores() -> void:
 	if is_instance_valid(p1_total_score):

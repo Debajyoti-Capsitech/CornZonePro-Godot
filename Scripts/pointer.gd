@@ -24,7 +24,7 @@ func _on_body_entered(body: Node3D) -> void:
 	var score_before: int = GameSession.score_p1 + GameSession.score_p2
 	body.set_meta(SCORED_META, true)
 	GameSession.mode_logic.on_ball_entered(body)
-	var uses_bag_result_slots: bool = GameSession.selected_mode == "PassPlay" or GameSession.selected_mode == "Local"
+	var uses_bag_result_slots: bool = GameSession.selected_mode == "PassPlay" or GameSession.selected_mode == "Local" or GameSession.selected_mode == "Multiplayer"
 	if uses_bag_result_slots and body.has_meta("bag_result_index"):
 		GameSession.update_bag_result(scoring_player, int(body.get_meta("bag_result_index")), int(body.get_meta("awarded_points", 0)))
 

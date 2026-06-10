@@ -571,6 +571,7 @@ func _save_dirty_sections():
 	
 func internet_available() -> bool:
 	var http = HTTPRequest.new()
+	http.timeout = 5.0
 	add_child(http)
 	var request_error = http.request(INTERNET_CHECK_URL)
 	if request_error != OK:

@@ -67,7 +67,15 @@ func _process(delta: float) -> void:
 		CamState.TRACKING_FLIGHT:
 			if is_instance_valid(tracking_bag):
 				if is_instance_valid(camera_ref):
-					camera_ref.look_at(tracking_bag.global_position)
+					var target_pos := tracking_bag.global_position
+					var current_quat := camera_ref.global_transform.basis.get_rotation_quaternion()
+					# Prevent look_at error if already looking at target or exactly above/below
+					if camera_ref.global_position.distance_squared_to(target_pos) > 0.001:
+						var target_transform := camera_ref.global_transform.looking_at(target_pos, Vector3.UP)
+						var target_quat := target_transform.basis.get_rotation_quaternion()
+						var lerp_weight := clampf(15.0 * unscaled_delta, 0.0, 1.0)
+						var next_quat := current_quat.slerp(target_quat, lerp_weight)
+						camera_ref.global_transform.basis = Basis(next_quat)
 				
 				# Get velocity and position to detect early cinematic window
 				var bag := tracking_bag as RigidBody3D
@@ -281,6 +289,9 @@ func show_fade_item(node: Control, delay: float) -> void:
 	node.show()
 	await get_tree().create_timer(delay).timeout
  
+	if not is_instance_valid(node) or not node.is_inside_tree():
+		return
+
 	var tween := create_tween()
 	tween.tween_property(
 		node,

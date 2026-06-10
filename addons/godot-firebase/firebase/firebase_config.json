@@ -1,10 +1,10 @@
 {
-  "apiKey": "AIzaSyCuQk1GjV4owRNTPIB3zqYlSxp4jfPrXyY",
-  "authDomain": "practicehaigodotme.firebaseapp.com",
-  "databaseURL": "",
-  "projectId": "practicehaigodotme",
-  "storageBucket": "practicehaigodotme.firebasestorage.app",
-  "androidApiKey": "AIzaSyCuQk1GjV4owRNTPIB3zqYlSxp4jfPrXyY",
-  "appId": "1:535482496580:android:00cb0569983fc8abd02e11",
-  "messagingSenderId": "535482496580"
+  "apiKey": "AIzaSyCQDE2W5XjM7QlmCVriOroLGC0DvA3Kb58",
+  "authDomain": "cornzonepro-670b7.firebaseapp.com",
+  "databaseURL": "https://cornzonepro-670b7-default-rtdb.firebaseio.com",
+  "projectId": "cornzonepro-670b7",
+  "storageBucket": "cornzonepro-670b7.firebasestorage.app",
+  "messagingSenderId": "316592237333",
+  "appId": "1:316592237333:web:b2ab9f56df676a1038971c",
+  "measurementId": "G-VGQ1SPQL9B"
 }

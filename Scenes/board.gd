@@ -49,7 +49,7 @@ func on_bag_landed(body: Node3D) -> void:
 	if not (body is RigidBody3D):
 		return
 
-	if GameSession.selected_mode == "Local":
+	if GameSession.selected_mode == "Local" or GameSession.selected_mode == "Multiplayer":
 		if not multiplayer or multiplayer.multiplayer_peer == null or not multiplayer.is_server():
 			return
 
@@ -63,11 +63,11 @@ func on_bag_landed(body: Node3D) -> void:
 	body.set_meta(AWARDED_POINTS_META, 1)
 	GameSession.add_score(scoring_player, 1)
 
-	var uses_bag_result_slots: bool = GameSession.selected_mode == "PassPlay" or GameSession.selected_mode == "Local"
+	var uses_bag_result_slots: bool = GameSession.selected_mode == "PassPlay" or GameSession.selected_mode == "Local" or GameSession.selected_mode == "Multiplayer"
 	if uses_bag_result_slots and body.has_meta("bag_result_index"):
 		GameSession.update_bag_result(scoring_player, int(body.get_meta("bag_result_index")), 1)
 
 	GameSession.pots_update.emit()
 
-	if GameSession.selected_mode == "Local" and GameSession.mode_logic and GameSession.mode_logic.has_method("sync_match_state"):
+	if (GameSession.selected_mode == "Local" or GameSession.selected_mode == "Multiplayer") and GameSession.mode_logic and GameSession.mode_logic.has_method("sync_match_state"):
 		GameSession.mode_logic.sync_match_state()

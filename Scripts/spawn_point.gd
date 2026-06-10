@@ -9,11 +9,13 @@ func _ready() -> void:
 	bag_counter = 0
 	_clear_spawned_bags()
 
-	if GameSession.selected_mode == "Local" and multiplayer and multiplayer.multiplayer_peer != null:
+	if (GameSession.selected_mode == "Local" or GameSession.selected_mode == "Multiplayer") and multiplayer and multiplayer.multiplayer_peer != null:
 		if multiplayer.is_server():
 			$"../StartTimer".start()
 		else:
 			$"../StartTimer".stop()
+	elif GameSession.selected_mode == "VSBot":
+		$"../StartTimer".stop()
 	else:
 		$"../StartTimer".start()
 
@@ -71,7 +73,7 @@ func spawn_bag_rpc(player_index: int) -> void:
 func _on_timer_timeout() -> void:
 	$"../StartTimer".stop()
 
-	if GameSession.selected_mode == "Local" and multiplayer and multiplayer.multiplayer_peer != null:
+	if (GameSession.selected_mode == "Local" or GameSession.selected_mode == "Multiplayer") and multiplayer and multiplayer.multiplayer_peer != null:
 		if multiplayer.is_server():
 			var player_index := GameSession.current_turn
 			spawn_bag(player_index)

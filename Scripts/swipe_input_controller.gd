@@ -14,7 +14,7 @@ signal swipe_updated(direction: Vector3, strength: float)
 @export var min_pitch_angle: float = 10.0
 @export var max_pitch_angle: float = 45.0
 @export var min_bag_strength: float = 1.0
-@export var max_bag_strength: float = 20.0
+@export var max_bag_strength: float = 19.0
 
 var start_time: int = 0
 var end_time: int = 0
@@ -31,7 +31,7 @@ func _ready() -> void:
 	cached_bag_config = _get_active_bag_config()
 
 func is_network_game() -> bool:
-	return GameSession.selected_mode == "Local"
+	return GameSession.selected_mode == "Local" or GameSession.selected_mode == "Multiplayer"
 
 func get_my_player_id() -> int:
 	return 1 if multiplayer.is_server() else 2

@@ -1,45 +1,26 @@
 {
   "project_info": {
-    "project_number": "667151349390",
-    "firebase_url": "https://cornzonepro-default-rtdb.firebaseio.com",
-    "project_id": "cornzonepro",
-    "storage_bucket": "cornzonepro.firebasestorage.app"
+    "project_number": "316592237333",
+    "project_id": "cornzonepro-670b7",
+    "storage_bucket": "cornzonepro-670b7.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:667151349390:android:25f7a39856cf10d4603bdf",
+        "mobilesdk_app_id": "1:316592237333:android:26f878e1b755fc4c38971c",
         "android_client_info": {
           "package_name": "com.TheGameWise.CornZonePro"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "667151349390-jifbqeagajff3oejgd42f4ob600jlfge.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.TheGameWise.CornZonePro",
-            "certificate_hash": "49d5ff1cddce83ed3bbc44c877be1f307578987c"
-          }
-        },
-        {
-          "client_id": "667151349390-cae5rviit5lepl8hrscuc1qsj7oe7eis.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDkjttyV5Ek01ibqUDBvFB5szdE0ia6QHY"
+          "current_key": "AIzaSyBnQUXJjAWwcWgt_ffZmcfuiLGNvUZNcZM"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "667151349390-cae5rviit5lepl8hrscuc1qsj7oe7eis.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

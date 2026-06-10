@@ -99,7 +99,11 @@ func update(path : String, data : Dictionary, etag : String = "") -> void:
 
 	var to_update = JSON.stringify(data)
 	
-	var resolved_path = (_get_list_url() + _db_path + "/" + path + _get_remaining_path())
+	var resolved_path = ""
+	if path == "":
+		resolved_path = (_get_list_url() + _db_path + _get_remaining_path())
+	else:
+		resolved_path = (_get_list_url() + _db_path + "/" + path + _get_remaining_path())
 	
 	var request_headers = _headers.duplicate()
 	if etag != "":
@@ -119,7 +123,11 @@ func put(path : String, data : Dictionary, etag : String = "") -> void:
 
 	var to_put = JSON.stringify(data)
 	
-	var resolved_path = (_get_list_url() + _db_path + "/" + path + _get_remaining_path())
+	var resolved_path = ""
+	if path == "":
+		resolved_path = (_get_list_url() + _db_path + _get_remaining_path())
+	else:
+		resolved_path = (_get_list_url() + _db_path + "/" + path + _get_remaining_path())
 	
 	var request_headers = _headers.duplicate()
 	if etag != "":
@@ -132,7 +140,13 @@ func delete(reference : String, etag : String = "") -> void:
 	if etag != "":
 		request_headers.append("If-Match: %s" % etag)
 		
-	_pusher.request(_get_list_url() + _db_path + _separator + reference + _get_remaining_path(), request_headers, HTTPClient.METHOD_DELETE, "")
+	var resolved_path = ""
+	if reference == "":
+		resolved_path = _get_list_url() + _db_path + _get_remaining_path()
+	else:
+		resolved_path = _get_list_url() + _db_path + _separator + reference + _get_remaining_path()
+		
+	_pusher.request(resolved_path, request_headers, HTTPClient.METHOD_DELETE, "")
 
 #
 # Returns a deep copy of the current local copy of the data stored at this reference in the Firebase
@@ -203,7 +217,8 @@ func _route_data(command : String, path : String, data) -> void:
 		_store.delete(path, data)
 
 func on_push_request_complete(result : int, response_code : int, headers : PackedStringArray, body : PackedByteArray) -> void:
-	if response_code == HTTPClient.RESPONSE_OK:
+	if response_code == HTTPClient.RESPONSE_OK or response_code == HTTPClient.RESPONSE_NO_CONTENT:
 		push_successful.emit()
 	else:
+		print("[Firebase Database Error] Request failed. Response code: ", response_code, " Result: ", result, " Body: ", body.get_string_from_utf8())
 		push_failed.emit()

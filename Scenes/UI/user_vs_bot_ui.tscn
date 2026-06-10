@@ -16,6 +16,9 @@
 [ext_resource type="Texture2D" uid="uid://upq0lyqb8g3w" path="res://Texture Or Sprites/SinglePlayer/Panel Button BG.png" id="13_q0dux"]
 [ext_resource type="Texture2D" uid="uid://bqnun5nbf26i8" path="res://Texture Or Sprites/SinglePlayer/cross.png" id="14_tyy1l"]
 [ext_resource type="Script" uid="uid://mh4yhpy7kgjy" path="res://Scripts/VSBot/game_over.gd" id="15_0yj45_new"]
+[ext_resource type="Script" uid="uid://ci0fpum8413cp" path="res://Scripts/VSBot/game_mode_selection_ui.gd" id="16_gamemode"]
+[ext_resource type="Script" uid="uid://nu0yqls7m0pu" path="res://Scripts/VSBot/multiplayer_ui.gd" id="17_multiplayer"]
+[ext_resource type="Script" uid="uid://culw2fbpyrhip" path="res://Scripts/VSBot/waiting_for_players_ui.gd" id="18_waiting"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_laimd"]
 texture = ExtResource("2_7s7w4")
@@ -69,27 +72,6 @@ corner_radius_bottom_left = 15
 shadow_color = Color(1, 0.6, 0.1, 0.3)
 shadow_size = 15
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8ojcy"]
-texture = ExtResource("14_tyy1l")
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_pyane"]
-texture = ExtResource("14_tyy1l")
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2iomb"]
-texture = ExtResource("14_tyy1l")
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_detail_panel"]
-bg_color = Color(0.02, 0.05, 0.1, 0.7)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.1, 0.3, 0.6, 0.5)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
-
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_c4pug"]
 texture = ExtResource("13_q0dux")
 
@@ -99,10 +81,130 @@ texture = ExtResource("13_q0dux")
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_umbsn"]
 texture = ExtResource("13_q0dux")
 
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8ojcy"]
+texture = ExtResource("14_tyy1l")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_pyane"]
+texture = ExtResource("14_tyy1l")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2iomb"]
+texture = ExtResource("14_tyy1l")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_blue_btn"]
+bg_color = Color(0, 0.3529412, 0.78431374, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.1, 0.6, 1, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_blue_btn_hover"]
+bg_color = Color(0, 0.47058824, 0.9411765, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.3, 0.75, 1, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_orange_btn"]
+bg_color = Color(0.78431374, 0.39215687, 0, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 0.6, 0.1, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_orange_btn_hover"]
+bg_color = Color(0.9411765, 0.47058824, 0, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 0.75, 0.3, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_back_btn"]
+bg_color = Color(0.015686275, 0.078431375, 0.1764706, 0.8)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.1, 0.6, 1, 0.7)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_back_btn_hover"]
+bg_color = Color(0.03137255, 0.15686275, 0.3529412, 0.9)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.2, 0.8, 1, 0.9)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_purple_card"]
+bg_color = Color(0.047058824, 0.015686275, 0.10980392, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.6666667, 0.1764706, 0.88235295, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+shadow_color = Color(0.6666667, 0.1764706, 0.88235295, 0.3)
+shadow_size = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_purple_btn"]
+bg_color = Color(0.47058824, 0, 0.5882353, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.7, 0.2, 0.9, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_purple_btn_hover"]
+bg_color = Color(0.5882353, 0, 0.78431374, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.8, 0.3, 1, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
 [node name="user vs bot_ui" type="Node" unique_id=1132116255]
 script = ExtResource("1_root")
 
 [node name="InGame UI" type="CanvasLayer" parent="." unique_id=909182139]
+visible = false
 script = ExtResource("2_ingame")
 
 [node name="Black Bg" type="TextureRect" parent="InGame UI" unique_id=1583866341]
@@ -560,111 +662,6 @@ grow_vertical = 2
 expand_mode = 1
 stretch_mode = 5
 
-[node name="CloseButton" type="Button" parent="InGame UI/VS_IntroPanel" unique_id=1234567919]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -60.0
-offset_top = 30.0
-offset_right = -20.0
-offset_bottom = 70.0
-grow_horizontal = 0
-theme_override_styles/normal = SubResource("StyleBoxTexture_8ojcy")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_pyane")
-theme_override_styles/hover = SubResource("StyleBoxTexture_2iomb")
-
-[node name="MatchDetails" type="HBoxContainer" parent="InGame UI/VS_IntroPanel" unique_id=1234567920]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -215.0
-offset_top = -140.0
-offset_right = 215.0
-offset_bottom = -90.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_constants/separation = 15
-alignment = 1
-
-[node name="WindPanel" type="Panel" parent="InGame UI/VS_IntroPanel/MatchDetails" unique_id=1234567921]
-custom_minimum_size = Vector2(130, 45)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_detail_panel")
-
-[node name="Label" type="Label" parent="InGame UI/VS_IntroPanel/MatchDetails/WindPanel" unique_id=1234567922]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -65.0
-offset_top = -15.0
-offset_right = 65.0
-offset_bottom = 15.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_fonts/font = ExtResource("6_j7th6")
-theme_override_font_sizes/font_size = 12
-text = "💨 WIND
-15 KM/H ➔➔➔"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="RoundPanel" type="Panel" parent="InGame UI/VS_IntroPanel/MatchDetails" unique_id=1234567923]
-custom_minimum_size = Vector2(130, 45)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_detail_panel")
-
-[node name="Label" type="Label" parent="InGame UI/VS_IntroPanel/MatchDetails/RoundPanel" unique_id=1234567924]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -65.0
-offset_top = -15.0
-offset_right = 65.0
-offset_bottom = 15.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_fonts/font = ExtResource("6_j7th6")
-theme_override_font_sizes/font_size = 12
-text = "💿 ROUND
-5 ROUNDS"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="TimePanel" type="Panel" parent="InGame UI/VS_IntroPanel/MatchDetails" unique_id=1234567925]
-custom_minimum_size = Vector2(130, 45)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_detail_panel")
-
-[node name="Label" type="Label" parent="InGame UI/VS_IntroPanel/MatchDetails/TimePanel" unique_id=1234567926]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -65.0
-offset_top = -15.0
-offset_right = 65.0
-offset_bottom = 15.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_fonts/font = ExtResource("6_j7th6")
-theme_override_font_sizes/font_size = 12
-text = "⏱️ TIME LIMIT
-60 SEC"
-horizontal_alignment = 1
-vertical_alignment = 1
-
 [node name="BottomSection" type="VBoxContainer" parent="InGame UI/VS_IntroPanel" unique_id=1234567927]
 layout_mode = 1
 anchors_preset = 7
@@ -673,9 +670,9 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -200.0
-offset_top = -80.0
+offset_top = -134.0
 offset_right = 200.0
-offset_bottom = -20.0
+offset_bottom = -74.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_constants/separation = 5
@@ -699,23 +696,11 @@ texture_progress = ExtResource("3_ajpdk")
 tint_under = Color(0.1, 0.2, 0.4, 0.5)
 tint_progress = Color(0.1, 0.6, 1, 1)
 
-[node name="TipLabel" type="Label" parent="InGame UI/VS_IntroPanel/BottomSection" unique_id=1234567930]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.6, 0.8, 1, 0.7)
-theme_override_fonts/font = ExtResource("6_j7th6")
-theme_override_font_sizes/font_size = 10
-text = "🎯 TIP: Wind affects your throw! Adjust your aim carefully."
-horizontal_alignment = 1
-
 [node name="User  1 Scores" type="TextureRect" parent="InGame UI" unique_id=1391214481]
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
 offset_left = 33.0
-offset_top = -590.0
+offset_top = 130.0
 offset_right = 204.192
-offset_bottom = -555.0
-grow_vertical = 0
+offset_bottom = 165.0
 texture = ExtResource("4_c04pc")
 expand_mode = 3
 stretch_mode = 4
@@ -798,17 +783,14 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Bot 2 Scores" type="TextureRect" parent="InGame UI" unique_id=2001186130]
-anchors_preset = 3
+anchors_preset = 1
 anchor_left = 1.0
-anchor_top = 1.0
 anchor_right = 1.0
-anchor_bottom = 1.0
 offset_left = -208.73502
-offset_top = -591.0
+offset_top = 129.0
 offset_right = -37.03302
-offset_bottom = -556.0
+offset_bottom = 164.0
 grow_horizontal = 0
-grow_vertical = 0
 texture = ExtResource("7_nlpdm")
 expand_mode = 3
 stretch_mode = 4
@@ -1248,6 +1230,812 @@ grow_horizontal = 2
 theme_override_fonts/font = ExtResource("6_j7th6")
 theme_override_font_sizes/font_size = 27
 text = "Player X Wins"
+
+[node name="GameModeSelectionUI" type="CanvasLayer" parent="." unique_id=755305608]
+script = ExtResource("16_gamemode")
+
+[node name="Control" type="Control" parent="GameModeSelectionUI" unique_id=92703017]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="TextureRect" parent="GameModeSelectionUI/Control" unique_id=826949148]
+self_modulate = Color(0.05, 0.05, 0.05, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("11_oaht2")
+expand_mode = 3
+
+[node name="HeaderSection" type="VBoxContainer" parent="GameModeSelectionUI/Control" unique_id=1831257546]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -250.0
+offset_top = 80.0
+offset_right = 250.0
+offset_bottom = 200.0
+grow_horizontal = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="Title" type="Label" parent="GameModeSelectionUI/Control/HeaderSection" unique_id=855502496]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 36
+text = "CHOOSE GAME MODE"
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="GameModeSelectionUI/Control/HeaderSection" unique_id=552263973]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.1, 0.6, 1, 1)
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 14
+text = "PICK YOUR CHALLENGE"
+horizontal_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GameModeSelectionUI/Control" unique_id=1889854993]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -220.0
+offset_top = -140.0
+offset_right = 220.0
+offset_bottom = 260.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="VSBotCard" type="PanelContainer" parent="GameModeSelectionUI/Control/VBoxContainer" unique_id=56931276]
+custom_minimum_size = Vector2(440, 180)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_blue_card")
+
+[node name="MarginContainer" type="MarginContainer" parent="GameModeSelectionUI/Control/VBoxContainer/VSBotCard" unique_id=1636254647]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="HBoxContainer" type="HBoxContainer" parent="GameModeSelectionUI/Control/VBoxContainer/VSBotCard/MarginContainer" unique_id=455437722]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="LeftSection" type="VBoxContainer" parent="GameModeSelectionUI/Control/VBoxContainer/VSBotCard/MarginContainer/HBoxContainer" unique_id=1603337177]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+alignment = 1
+
+[node name="Icon" type="Label" parent="GameModeSelectionUI/Control/VBoxContainer/VSBotCard/MarginContainer/HBoxContainer/LeftSection" unique_id=1078028120]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.1, 0.6, 1, 1)
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 38
+text = "👤vs🤖"
+horizontal_alignment = 1
+
+[node name="RightSection" type="VBoxContainer" parent="GameModeSelectionUI/Control/VBoxContainer/VSBotCard/MarginContainer/HBoxContainer" unique_id=93610614]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+alignment = 1
+
+[node name="Title" type="Label" parent="GameModeSelectionUI/Control/VBoxContainer/VSBotCard/MarginContainer/HBoxContainer/RightSection" unique_id=604480843]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.1, 0.6, 1, 1)
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 20
+text = "PLAYER VS BOT"
+
+[node name="Description" type="Label" parent="GameModeSelectionUI/Control/VBoxContainer/VSBotCard/MarginContainer/HBoxContainer/RightSection" unique_id=1612963559]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.85, 1, 1)
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 11
+text = "Play against an AI opponent. Perfect for practice and improving your skills."
+autowrap_mode = 3
+
+[node name="Spacer" type="Control" parent="GameModeSelectionUI/Control/VBoxContainer/VSBotCard/MarginContainer/HBoxContainer/RightSection" unique_id=1713828061]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
+[node name="SelectButton" type="Button" parent="GameModeSelectionUI/Control/VBoxContainer/VSBotCard/MarginContainer/HBoxContainer/RightSection" unique_id=2064765527]
+custom_minimum_size = Vector2(160, 42)
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxFlat_blue_btn")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_blue_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_blue_btn_hover")
+text = "SELECT ->"
+
+[node name="MultiplayerCard" type="PanelContainer" parent="GameModeSelectionUI/Control/VBoxContainer" unique_id=663945303]
+custom_minimum_size = Vector2(440, 180)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_orange_card")
+
+[node name="MarginContainer" type="MarginContainer" parent="GameModeSelectionUI/Control/VBoxContainer/MultiplayerCard" unique_id=346722967]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="HBoxContainer" type="HBoxContainer" parent="GameModeSelectionUI/Control/VBoxContainer/MultiplayerCard/MarginContainer" unique_id=1151539519]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="LeftSection" type="VBoxContainer" parent="GameModeSelectionUI/Control/VBoxContainer/MultiplayerCard/MarginContainer/HBoxContainer" unique_id=583145086]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+alignment = 1
+
+[node name="Icon" type="Label" parent="GameModeSelectionUI/Control/VBoxContainer/MultiplayerCard/MarginContainer/HBoxContainer/LeftSection" unique_id=308724337]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.6, 0.1, 1)
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 46
+text = "🌐"
+horizontal_alignment = 1
+
+[node name="RightSection" type="VBoxContainer" parent="GameModeSelectionUI/Control/VBoxContainer/MultiplayerCard/MarginContainer/HBoxContainer" unique_id=1789707175]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+alignment = 1
+
+[node name="Title" type="Label" parent="GameModeSelectionUI/Control/VBoxContainer/MultiplayerCard/MarginContainer/HBoxContainer/RightSection" unique_id=1689360328]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.6, 0.1, 1)
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 20
+text = "MULTIPLAYER"
+
+[node name="Description" type="Label" parent="GameModeSelectionUI/Control/VBoxContainer/MultiplayerCard/MarginContainer/HBoxContainer/RightSection" unique_id=2005357698]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.8, 0.5, 1)
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 11
+text = "Compete with real players around the world. Prove you are the ultimate champion!"
+autowrap_mode = 3
+
+[node name="Spacer" type="Control" parent="GameModeSelectionUI/Control/VBoxContainer/MultiplayerCard/MarginContainer/HBoxContainer/RightSection" unique_id=1002898266]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
+[node name="SelectButton" type="Button" parent="GameModeSelectionUI/Control/VBoxContainer/MultiplayerCard/MarginContainer/HBoxContainer/RightSection" unique_id=1914306717]
+custom_minimum_size = Vector2(160, 42)
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxFlat_orange_btn")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_orange_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_orange_btn_hover")
+text = "SELECT ->"
+
+[node name="BackButton" type="Button" parent="GameModeSelectionUI/Control" unique_id=2144821375]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 0
+offset_left = 25.0
+offset_top = 35.0
+offset_right = 75.0
+offset_bottom = 85.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_back_btn")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_back_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_back_btn_hover")
+text = "<-"
+
+[node name="MultiplayerUI" type="CanvasLayer" parent="." unique_id=1520975403]
+script = ExtResource("17_multiplayer")
+
+[node name="Control" type="Control" parent="MultiplayerUI" unique_id=1981169180]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="TextureRect" parent="MultiplayerUI/Control" unique_id=871516309]
+self_modulate = Color(0.05, 0.05, 0.05, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("11_oaht2")
+expand_mode = 3
+
+[node name="HeaderSection" type="VBoxContainer" parent="MultiplayerUI/Control" unique_id=237286044]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -250.0
+offset_top = 80.0
+offset_right = 250.0
+offset_bottom = 200.0
+grow_horizontal = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="Title" type="Label" parent="MultiplayerUI/Control/HeaderSection" unique_id=1687947781]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.1, 0.6, 1, 1)
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 36
+text = "MULTIPLAYER"
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="MultiplayerUI/Control/HeaderSection" unique_id=1138072085]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 13
+text = "Compete with players around the world!"
+horizontal_alignment = 1
+
+[node name="BackButton" type="Button" parent="MultiplayerUI/Control" unique_id=569336495]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 0
+offset_left = 25.0
+offset_top = 35.0
+offset_right = 75.0
+offset_bottom = 85.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_back_btn")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_back_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_back_btn_hover")
+text = "<-"
+
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MultiplayerUI/Control" unique_id=483329612]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -220.0
+offset_top = 180.0
+offset_right = 220.0
+offset_bottom = 600.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 15
+alignment = 1
+
+
+[node name="CreateRoomCard" type="PanelContainer" parent="MultiplayerUI/Control/VBoxContainer" unique_id=1491641274]
+custom_minimum_size = Vector2(440, 130)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_orange_card")
+
+[node name="MarginContainer" type="MarginContainer" parent="MultiplayerUI/Control/VBoxContainer/CreateRoomCard" unique_id=1518436515]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MultiplayerUI/Control/VBoxContainer/CreateRoomCard/MarginContainer" unique_id=141359260]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="LeftSection" type="VBoxContainer" parent="MultiplayerUI/Control/VBoxContainer/CreateRoomCard/MarginContainer/HBoxContainer" unique_id=1956286900]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+alignment = 1
+
+[node name="Icon" type="Label" parent="MultiplayerUI/Control/VBoxContainer/CreateRoomCard/MarginContainer/HBoxContainer/LeftSection" unique_id=1399939551]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.6, 0.1, 1)
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 32
+text = "👥"
+horizontal_alignment = 1
+
+[node name="RightSection" type="VBoxContainer" parent="MultiplayerUI/Control/VBoxContainer/CreateRoomCard/MarginContainer/HBoxContainer" unique_id=1592787992]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="Title" type="Label" parent="MultiplayerUI/Control/VBoxContainer/CreateRoomCard/MarginContainer/HBoxContainer/RightSection" unique_id=1912707121]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.6, 0.1, 1)
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 16
+text = "CREATE ROOM"
+
+[node name="Description" type="Label" parent="MultiplayerUI/Control/VBoxContainer/CreateRoomCard/MarginContainer/HBoxContainer/RightSection" unique_id=1042995767]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.8, 0.5, 1)
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 10
+text = "Create your own room and invite your friends to play."
+autowrap_mode = 3
+
+[node name="CreateRoomButton" type="Button" parent="MultiplayerUI/Control/VBoxContainer/CreateRoomCard/MarginContainer/HBoxContainer/RightSection" unique_id=1355328473]
+custom_minimum_size = Vector2(160, 36)
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxFlat_orange_btn")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_orange_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_orange_btn_hover")
+text = "CREATE ROOM +"
+
+[node name="QuickMatchCard" type="PanelContainer" parent="MultiplayerUI/Control/VBoxContainer"]
+custom_minimum_size = Vector2(440, 130)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_blue_card")
+
+[node name="MarginContainer" type="MarginContainer" parent="MultiplayerUI/Control/VBoxContainer/QuickMatchCard"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MultiplayerUI/Control/VBoxContainer/QuickMatchCard/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="LeftSection" type="VBoxContainer" parent="MultiplayerUI/Control/VBoxContainer/QuickMatchCard/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+alignment = 1
+
+[node name="Icon" type="Label" parent="MultiplayerUI/Control/VBoxContainer/QuickMatchCard/MarginContainer/HBoxContainer/LeftSection"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.1, 0.6, 1, 1)
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 32
+text = "🔍"
+horizontal_alignment = 1
+
+[node name="RightSection" type="VBoxContainer" parent="MultiplayerUI/Control/VBoxContainer/QuickMatchCard/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="Title" type="Label" parent="MultiplayerUI/Control/VBoxContainer/QuickMatchCard/MarginContainer/HBoxContainer/RightSection"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.1, 0.6, 1, 1)
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 16
+text = "FIND A MATCH"
+
+[node name="Description" type="Label" parent="MultiplayerUI/Control/VBoxContainer/QuickMatchCard/MarginContainer/HBoxContainer/RightSection"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.85, 1, 1)
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 10
+text = "Join an available room without needing a code."
+autowrap_mode = 3
+
+[node name="FindMatchButton" type="Button" parent="MultiplayerUI/Control/VBoxContainer/QuickMatchCard/MarginContainer/HBoxContainer/RightSection"]
+custom_minimum_size = Vector2(160, 36)
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxFlat_blue_btn")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_blue_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_blue_btn_hover")
+text = "FIND MATCH"
+
+[node name="JoinRoomCard" type="PanelContainer" parent="MultiplayerUI/Control/VBoxContainer" unique_id=1075023008]
+custom_minimum_size = Vector2(440, 130)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_purple_card")
+
+[node name="MarginContainer" type="MarginContainer" parent="MultiplayerUI/Control/VBoxContainer/JoinRoomCard" unique_id=619987247]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MultiplayerUI/Control/VBoxContainer/JoinRoomCard/MarginContainer" unique_id=1453848498]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="CodeInput" type="LineEdit" parent="MultiplayerUI/Control/VBoxContainer/JoinRoomCard/MarginContainer/HBoxContainer" unique_id=867422624]
+custom_minimum_size = Vector2(280, 45)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 12
+placeholder_text = "ENTER ROOM CODE"
+alignment = 1
+max_length = 8
+
+[node name="JoinButton" type="Button" parent="MultiplayerUI/Control/VBoxContainer/JoinRoomCard/MarginContainer/HBoxContainer" unique_id=645728504]
+custom_minimum_size = Vector2(120, 45)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxFlat_purple_btn")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_purple_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_purple_btn_hover")
+text = "JOIN"
+
+[node name="FeedbackLabel" type="Label" parent="MultiplayerUI/Control" unique_id=1274920879]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -250.0
+offset_top = -110.0
+offset_right = 250.0
+offset_bottom = -70.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.1, 0.75, 1, 1)
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 13
+text = "Searching..."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Footer" type="Label" parent="MultiplayerUI/Control" unique_id=953383832]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -250.0
+offset_top = -60.0
+offset_right = 250.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.5, 0.6, 0.7, 1)
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 9
+text = "Play fair and have fun! Fair play is our priority."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="WaitingForPlayersUI" type="CanvasLayer" parent="." unique_id=866014608]
+script = ExtResource("18_waiting")
+
+[node name="Control" type="Control" parent="WaitingForPlayersUI" unique_id=299226021]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="TextureRect" parent="WaitingForPlayersUI/Control" unique_id=1445265261]
+self_modulate = Color(0.04, 0.04, 0.06, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("11_oaht2")
+expand_mode = 3
+
+[node name="Header" type="Label" parent="WaitingForPlayersUI/Control" unique_id=1551672946]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -200.0
+offset_top = 80.0
+offset_right = 200.0
+offset_bottom = 120.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 32
+text = "WAITING FOR PLAYERS"
+horizontal_alignment = 1
+
+[node name="RoomCodeLabel" type="Label" parent="WaitingForPlayersUI/Control" unique_id=1859716086]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -200.0
+offset_top = 135.0
+offset_right = 100.0
+offset_bottom = 165.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 0.6, 0.1, 1)
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 16
+text = "Room Code: ----"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CopyCodeButton" type="Button" parent="WaitingForPlayersUI/Control" unique_id=402187060]
+custom_minimum_size = Vector2(40, 30)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 90.0
+offset_top = 135.0
+offset_right = 150.0
+offset_bottom = 165.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 11
+theme_override_styles/normal = SubResource("StyleBoxFlat_back_btn")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_back_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_back_btn_hover")
+text = "COPY"
+
+[node name="LeaveButton" type="Button" parent="WaitingForPlayersUI/Control" unique_id=2062643006]
+self_modulate = Color(1, 0.25, 0.25, 1)
+custom_minimum_size = Vector2(100, 40)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -140.0
+offset_top = 35.0
+offset_right = -25.0
+offset_bottom = 75.0
+grow_horizontal = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("StyleBoxFlat_back_btn")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_back_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_back_btn_hover")
+text = "X LEAVE"
+
+[node name="LobbyHBox" type="HBoxContainer" parent="WaitingForPlayersUI/Control" unique_id=161935633]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -230.0
+offset_top = -190.0
+offset_right = 230.0
+offset_bottom = 120.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="P1Card" type="PanelContainer" parent="WaitingForPlayersUI/Control/LobbyHBox" unique_id=1922023477]
+custom_minimum_size = Vector2(190, 310)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_blue_card")
+
+[node name="Margin" type="MarginContainer" parent="WaitingForPlayersUI/Control/LobbyHBox/P1Card" unique_id=1770938092]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="VBox" type="VBoxContainer" parent="WaitingForPlayersUI/Control/LobbyHBox/P1Card/Margin" unique_id=1762045220]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="Header" type="Label" parent="WaitingForPlayersUI/Control/LobbyHBox/P1Card/Margin/VBox" unique_id=971566671]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.1, 0.6, 1, 1)
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 14
+text = "PLAYER 1"
+horizontal_alignment = 1
+
+[node name="Avatar" type="TextureRect" parent="WaitingForPlayersUI/Control/LobbyHBox/P1Card/Margin/VBox" unique_id=1921705101]
+custom_minimum_size = Vector2(90, 90)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+expand_mode = 1
+stretch_mode = 5
+
+[node name="NameLabel" type="Label" parent="WaitingForPlayersUI/Control/LobbyHBox/P1Card/Margin/VBox" unique_id=506948870]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 15
+text = "YOU"
+horizontal_alignment = 1
+
+[node name="StatusLabel" type="Label" parent="WaitingForPlayersUI/Control/LobbyHBox/P1Card/Margin/VBox" unique_id=1368651000]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.8, 0.2, 1)
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 12
+text = "READY"
+horizontal_alignment = 1
+
+[node name="Stats" type="VBoxContainer" parent="WaitingForPlayersUI/Control/LobbyHBox/P1Card/Margin/VBox" unique_id=1415417475]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="MatchesRow" type="HBoxContainer" parent="WaitingForPlayersUI/Control/LobbyHBox/P1Card/Margin/VBox/Stats" unique_id=813223233]
+layout_mode = 2
+alignment = 1
+
+[node name="Icon" type="Label" parent="WaitingForPlayersUI/Control/LobbyHBox/P1Card/Margin/VBox/Stats/MatchesRow" unique_id=253913135]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "🎮 "
+
+[node name="Val" type="Label" parent="WaitingForPlayersUI/Control/LobbyHBox/P1Card/Margin/VBox/Stats/MatchesRow" unique_id=29803220]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 13
+text = "0"
+
+[node name="PotsRow" type="HBoxContainer" parent="WaitingForPlayersUI/Control/LobbyHBox/P1Card/Margin/VBox/Stats" unique_id=709400956]
+layout_mode = 2
+alignment = 1
+
+[node name="Icon" type="Label" parent="WaitingForPlayersUI/Control/LobbyHBox/P1Card/Margin/VBox/Stats/PotsRow" unique_id=101263774]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "🏆 "
+
+[node name="Val" type="Label" parent="WaitingForPlayersUI/Control/LobbyHBox/P1Card/Margin/VBox/Stats/PotsRow" unique_id=1053744100]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 13
+text = "0"
+
+[node name="VsLabel" type="Label" parent="WaitingForPlayersUI/Control/LobbyHBox" unique_id=1558114672]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.1, 0.6, 1, 1)
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 32
+text = "VS"
+horizontal_alignment = 1
+
+[node name="P2Card" type="PanelContainer" parent="WaitingForPlayersUI/Control/LobbyHBox" unique_id=149713403]
+custom_minimum_size = Vector2(190, 310)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_orange_card")
+
+[node name="Margin" type="MarginContainer" parent="WaitingForPlayersUI/Control/LobbyHBox/P2Card" unique_id=1171642325]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="VBox" type="VBoxContainer" parent="WaitingForPlayersUI/Control/LobbyHBox/P2Card/Margin" unique_id=1553241719]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="Header" type="Label" parent="WaitingForPlayersUI/Control/LobbyHBox/P2Card/Margin/VBox" unique_id=48174183]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.6, 0.1, 1)
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 14
+text = "PLAYER 2"
+horizontal_alignment = 1
+
+[node name="Avatar" type="TextureRect" parent="WaitingForPlayersUI/Control/LobbyHBox/P2Card/Margin/VBox" unique_id=440720060]
+self_modulate = Color(0.4, 0.4, 0.4, 0.6)
+custom_minimum_size = Vector2(90, 90)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+expand_mode = 1
+stretch_mode = 5
+
+[node name="NameLabel" type="Label" parent="WaitingForPlayersUI/Control/LobbyHBox/P2Card/Margin/VBox" unique_id=403730053]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 15
+text = "PLAYER 2"
+horizontal_alignment = 1
+
+[node name="StatusLabel" type="Label" parent="WaitingForPlayersUI/Control/LobbyHBox/P2Card/Margin/VBox" unique_id=1704235203]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.6, 0.1, 1)
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 12
+text = "WAITING..."
+horizontal_alignment = 1
+
+[node name="Stats" type="VBoxContainer" parent="WaitingForPlayersUI/Control/LobbyHBox/P2Card/Margin/VBox" unique_id=2415417475]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="MatchesRow" type="HBoxContainer" parent="WaitingForPlayersUI/Control/LobbyHBox/P2Card/Margin/VBox/Stats" unique_id=2813223233]
+layout_mode = 2
+alignment = 1
+
+[node name="Icon" type="Label" parent="WaitingForPlayersUI/Control/LobbyHBox/P2Card/Margin/VBox/Stats/MatchesRow" unique_id=2253913135]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "🎮 "
+
+[node name="Val" type="Label" parent="WaitingForPlayersUI/Control/LobbyHBox/P2Card/Margin/VBox/Stats/MatchesRow" unique_id=229803220]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 13
+text = "0"
+
+[node name="PotsRow" type="HBoxContainer" parent="WaitingForPlayersUI/Control/LobbyHBox/P2Card/Margin/VBox/Stats" unique_id=2709400956]
+layout_mode = 2
+alignment = 1
+
+[node name="Icon" type="Label" parent="WaitingForPlayersUI/Control/LobbyHBox/P2Card/Margin/VBox/Stats/PotsRow" unique_id=2101263774]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "🏆 "
+
+[node name="Val" type="Label" parent="WaitingForPlayersUI/Control/LobbyHBox/P2Card/Margin/VBox/Stats/PotsRow" unique_id=21053744100]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 13
+text = "0"
+
+[node name="DotsLabel" type="Label" parent="WaitingForPlayersUI/Control/LobbyHBox/P2Card/Margin/VBox" unique_id=132542319]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.6, 0.1, 1)
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 14
+text = "● ● ●"
+horizontal_alignment = 1
+
+[node name="Spacer" type="Control" parent="WaitingForPlayersUI/Control/LobbyHBox/P2Card/Margin/VBox" unique_id=1787301071]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
+[node name="Subtext" type="Label" parent="WaitingForPlayersUI/Control/LobbyHBox/P2Card/Margin/VBox" unique_id=1870670250]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+theme_override_fonts/font = ExtResource("6_j7th6")
+theme_override_font_sizes/font_size = 9
+text = "Waiting for opponent..."
+horizontal_alignment = 1
+autowrap_mode = 3
+
 
 [connection signal="pressed" from="PauseMenu/Control/PausePanel BG/Home" to="PauseMenu" method="_on_home_pressed"]
 [connection signal="pressed" from="PauseMenu/Control/PausePanel BG/Restart" to="PauseMenu" method="_on_restart_pressed"]

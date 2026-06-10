@@ -4,13 +4,15 @@ const UI_SCENES = {
 	"Single": preload("res://Scenes/UI/single_player_ui.tscn"),
 	"PassPlay": preload("res://Scenes/UI/pass_play_ui.tscn"),
 	"Local": preload("res://Scenes/UI/local_multiplayer_ui.tscn"),
-	"VSBot": preload("res://Scenes/UI/user_vs_bot_ui.tscn")
+	"VSBot": preload("res://Scenes/UI/user_vs_bot_ui.tscn"),
+	"Multiplayer": preload("res://Scenes/UI/user_vs_bot_ui.tscn")
 }
 
 const SingleMode = preload("res://Scripts/Modes/SingleMode.gd")
 const PassPlayMode = preload("res://Scripts/Modes/PassPlayMode.gd")
 const LocalMode = preload("res://Scripts/Modes/LocalMode.gd")
 const VSBotMode = preload("res://Scripts/Modes/VSBotMode.gd")
+const MultiplayerMode = preload("res://Scripts/Modes/VSBotMode.gd")
 
 signal pots_update
 signal match_played
@@ -48,7 +50,7 @@ func wind_control(value:int)->void:
 
 
 func is_network_mode() -> bool:
-	return selected_mode == "Local"
+	return selected_mode == "Local" or selected_mode == "Multiplayer"
 
 
 func start_match(mode: String, map_path: String, ui: String, time_limit: float) -> void:
@@ -60,7 +62,7 @@ func start_match(mode: String, map_path: String, ui: String, time_limit: float) 
 	match mode:
 		"Single":
 			player_count = 1
-		"PassPlay", "Local", "VSBot":
+		"PassPlay", "Local", "VSBot", "Multiplayer":
 			player_count = 2
 
 	current_turn = 1
@@ -88,7 +90,7 @@ func _set_mode_logic() -> void:
 			mode_logic = SingleMode.new()
 		"PassPlay":
 			mode_logic = PassPlayMode.new()
-		"Local":
+		"Local", "Multiplayer":
 			mode_logic = LocalMode.new()
 		"VSBot":
 			mode_logic = VSBotMode.new()

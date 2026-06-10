@@ -39,7 +39,8 @@ func on_bag_thrown() -> void:
 
 	# If it is the Bot's turn (Player 2), trigger the bot throw
 	if GameSession.current_turn == 2 and not GameSession.match_over:
-		trigger_bot_throw()
+		if GameSession.selected_mode != "Multiplayer":
+			trigger_bot_throw()
 
 func trigger_bot_throw() -> void:
 	# Wait for the bag to spawn and add a natural delay for bot thinking

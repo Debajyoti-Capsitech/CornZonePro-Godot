@@ -46,6 +46,7 @@ StatsManager="*uid://d0wc1bcokkoto"
 Authentication="*uid://ddlraklpim8jq"
 AnimateManager="*uid://chnbo5soimd3"
 TransitionLayer="*uid://bipay2e3jxs6"
+WebRTCSignaling="*res://Scripts/Autoloads/WebRTCSignaling.gd"
 
 [display]
 
@@ -61,7 +62,7 @@ project/assembly_name="Cornzone"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/AdmobPlugin/plugin.cfg", "res://addons/godot-firebase/plugin.cfg", "res://addons/godotx_firebase/plugin.cfg", "res://addons/http-sse-client/plugin.cfg", "res://addons/playerprefs/plugin.cfg")
+enabled=PackedStringArray("res://addons/AdmobPlugin/plugin.cfg", "res://addons/godot-firebase/plugin.cfg", "res://addons/godotx_firebase/plugin.cfg", "res://addons/http-sse-client/plugin.cfg", "res://addons/playerprefs/plugin.cfg", "res://addons/webrtc/plugin.cfg")
 
 [physics]
 

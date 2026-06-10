@@ -81,9 +81,10 @@ func _restore_saved_session():
 		_show_auth_panel()
 		return
  
-	if not has_auth_file and saved_uid == "":
-		_log("Auth expired")
-		_show_auth_panel("Please log in.")
+	if not has_auth_file:
+		_log("Auth file missing but local session exists. Must re-login.")
+		PlayerData.clear_login_session()
+		_show_auth_panel("Session expired. Please log in.")
 		return
  
 	#%StateLabel.text = "Logging in..."
@@ -93,10 +94,12 @@ func _restore_saved_session():
 		await get_tree().process_frame
 		if Firebase.Auth.auth.localid != "":
 			uid = Firebase.Auth.auth.localid
+			
 	if uid == "":
 		PlayerData.clear_login_session()
 		_show_auth_panel("Session expired. Please log in.")
 		return
+		
 	await _init_and_load(uid, "saved_session", false)
 	
  
